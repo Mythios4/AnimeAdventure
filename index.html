@@ -1,102 +1,548 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anime Adventures Script</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: #0f0f12;
-            color: #e0e0e0;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .card {
-            background: #1a1a20;
-            border: 1px solid #2a2a32;
-            border-radius: 16px;
-            padding: 32px;
-            max-width: 560px;
-            width: 100%;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-        }
-        h1 {
-            font-size: 22px;
-            margin-bottom: 8px;
-            color: #fff;
-        }
-        .sub {
-            font-size: 14px;
-            color: #888;
-            margin-bottom: 24px;
-        }
-        .code-box {
-            background: #0d0d10;
-            border: 1px solid #2a2a32;
-            border-radius: 10px;
-            padding: 16px;
-            font-family: "SF Mono", "Fira Code", Consolas, monospace;
-            font-size: 13px;
-            line-height: 1.5;
-            word-break: break-all;
-            color: #7ee787;
-            margin-bottom: 20px;
-            position: relative;
-        }
-        button {
-            background: #238636;
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            padding: 12px 20px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            transition: background 0.15s;
-        }
-        button:hover { background: #2ea043; }
-        button.copied { background: #1a7f37; }
-        .note {
-            margin-top: 18px;
-            font-size: 13px;
-            color: #666;
-            text-align: center;
-        }
-    </style>
-</head>
-<body>
-    <div class="card">
-        <h1>Anime Adventures</h1>
-        <div class="sub">Paste this in your executor</div>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080b0a">
+<title>Mythios — Anime Adventures</title>
+<meta name="description" content="Mythios Anime Adventures Script Hub. Quick access to the latest script loader.">
 
-        <div class="code-box" id="script">
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Mythios4/AnimeAdventures/refs/heads/main/script.lua"))()
+<!-- GoatCounter Analytics -->
+<script data-goatcounter="https://YOURCODE.goatcounter.com/count"
+        async src="https://gc.zgo.at/count.js"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --bg: #080b0a;
+    --surface: #101613;
+    --surface2: #141c18;
+    --border: rgba(255,255,255,.075);
+    --green: #72e5a5;
+    --green2: #36bd79;
+    --text: #f0f5f1;
+    --muted: #84918a;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+        linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
+    background-size: 45px 45px;
+    mask-image: linear-gradient(to bottom, black, transparent 85%);
+}
+
+.glow {
+    position: fixed;
+    width: 500px;
+    height: 500px;
+    background: rgba(38, 174, 104, .09);
+    filter: blur(120px);
+    border-radius: 50%;
+    top: -300px;
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: none;
+}
+
+.container {
+    width: min(100% - 40px, 650px);
+    margin: auto;
+    position: relative;
+    z-index: 1;
+}
+
+header {
+    height: 85px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    font-size: 17px;
+    font-weight: 900;
+    letter-spacing: -1px;
+}
+
+.logo {
+    width: 38px;
+    height: 38px;
+    border-radius: 11px;
+    background: linear-gradient(145deg, #9af5bd, #37b778);
+    display: grid;
+    place-items: center;
+    color: #07150d;
+    font-weight: 900;
+    font-size: 20px;
+    box-shadow: 0 0 25px rgba(75, 220, 140, .15);
+}
+
+.brand span {
+    color: var(--green);
+}
+
+.header-right {
+    font-family: 'DM Mono', monospace;
+    color: var(--muted);
+    font-size: 10px;
+    letter-spacing: 1px;
+}
+
+main {
+    padding: 85px 0 65px;
+    animation: appear .7s ease both;
+}
+
+@keyframes appear {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.intro {
+    text-align: center;
+    margin-bottom: 38px;
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid rgba(114,229,165,.18);
+    background: rgba(114,229,165,.06);
+    color: var(--green);
+    border-radius: 30px;
+    padding: 8px 13px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    margin-bottom: 23px;
+}
+
+.badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 10px var(--green);
+}
+
+h1 {
+    font-size: clamp(32px, 7vw, 48px);
+    font-weight: 900;
+    letter-spacing: -2.5px;
+    line-height: 1.1;
+    margin-bottom: 14px;
+}
+
+h1 span {
+    color: var(--green);
+}
+
+.description {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.8;
+    max-width: 390px;
+    margin: auto;
+}
+
+.script-card {
+    background: linear-gradient(145deg, #131b16, #0e1310);
+    border: 1px solid rgba(255,255,255,.09);
+    border-radius: 18px;
+    padding: 23px;
+    box-shadow: 0 25px 70px rgba(0,0,0,.3);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 19px;
+}
+
+.card-title {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+}
+
+.game-icon {
+    width: 39px;
+    height: 39px;
+    background: #1b3025;
+    border: 1px solid rgba(114,229,165,.15);
+    border-radius: 11px;
+    display: grid;
+    place-items: center;
+    color: var(--green);
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.game-name {
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.game-sub {
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 4px;
+}
+
+.lua-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--green);
+    background: rgba(114,229,165,.07);
+    padding: 7px 10px;
+    border-radius: 6px;
+    border: 1px solid rgba(114,229,165,.12);
+}
+
+.code-area {
+    background: #090d0b;
+    border: 1px solid #222e27;
+    border-radius: 11px;
+    padding: 19px;
+    position: relative;
+    margin-bottom: 16px;
+    overflow: hidden;
+}
+
+.code-area::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 3px;
+    background: var(--green2);
+}
+
+.code-label {
+    color: #63736a;
+    font-size: 9px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+}
+
+#script {
+    display: block;
+    color: #8be9ad;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    line-height: 1.8;
+    overflow-wrap: anywhere;
+    user-select: text;
+}
+
+.copy-btn {
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(110deg, #79edaa, #48cc85);
+    color: #08150d;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .5px;
+    padding: 16px;
+    cursor: pointer;
+    transition: .2s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.copy-btn:hover {
+    filter: brightness(1.08);
+    box-shadow: 0 5px 25px rgba(72,204,133,.18);
+    transform: translateY(-2px);
+}
+
+.copy-btn:active {
+    transform: scale(.99);
+}
+
+.copy-btn.success {
+    background: #1e6842;
+    color: white;
+}
+
+.copy-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+.features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 17px;
+}
+
+.feature {
+    padding: 15px 10px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,.018);
+    border-radius: 10px;
+    text-align: center;
+}
+
+.feature-icon {
+    color: var(--green);
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+.feature-title {
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.feature-desc {
+    font-size: 9px;
+    color: var(--muted);
+    margin-top: 5px;
+}
+
+.notice {
+    margin-top: 18px;
+    border: 1px solid rgba(114,229,165,.1);
+    background: rgba(114,229,165,.035);
+    padding: 14px;
+    border-radius: 10px;
+    color: var(--muted);
+    font-size: 10px;
+    line-height: 1.7;
+    text-align: center;
+}
+
+.notice strong {
+    color: var(--green);
+}
+
+footer {
+    padding: 23px 0 35px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    color: #66736b;
+    font-size: 10px;
+}
+
+footer strong {
+    color: #a2b1a7;
+}
+
+.toast {
+    position: fixed;
+    z-index: 5;
+    bottom: 25px;
+    left: 50%;
+    transform: translate(-50%, 15px);
+    background: #17271d;
+    border: 1px solid #315b40;
+    color: var(--green);
+    padding: 12px 18px;
+    border-radius: 9px;
+    font-size: 11px;
+    font-weight: 700;
+    opacity: 0;
+    transition: .25s;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+
+@media(max-width: 500px) {
+    .container { width: calc(100% - 30px); }
+    header { height: 72px; }
+    main { padding: 65px 0 45px; }
+    .script-card { padding: 17px; }
+    .features { gap: 7px; }
+    .feature { padding: 13px 5px; }
+    footer { flex-direction: column; text-align: center; }
+}
+
+@media(prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="glow"></div>
+
+<div class="container">
+
+<header>
+    <div class="brand">
+        <div class="logo">M</div>
+        MYTHIOS<span>.</span>
+    </div>
+    <div class="header-right">SCRIPT HUB / 001</div>
+</header>
+
+<main>
+
+    <section class="intro">
+        <div class="badge">
+            <span class="badge-dot"></span>
+            MYTHIOS SCRIPT DISTRIBUTION
         </div>
 
-        <button onclick="copyScript()" id="btn">Copy Script</button>
+        <h1>Anime <span>Adventures</span></h1>
 
-        <div class="note">Works on most executors • Keyless</div>
+        <p class="description">
+            A simple and convenient way to access the Mythios
+            script. Copy the loader below and you're ready to go.
+        </p>
+    </section>
+
+    <section class="script-card">
+
+        <div class="card-header">
+            <div class="card-title">
+                <div class="game-icon">A</div>
+                <div>
+                    <div class="game-name">Anime Adventures</div>
+                    <div class="game-sub">Mythios Script Loader</div>
+                </div>
+            </div>
+            <div class="lua-tag">LUA</div>
+        </div>
+
+        <div class="code-area">
+            <div class="code-label">SCRIPT / LOADSTRING</div>
+            <code id="script">loadstring(game:HttpGet("https://raw.githubusercontent.com/Mythios4/AnimeAdventures/refs/heads/main/script.lua"))()</code>
+        </div>
+
+        <button class="copy-btn" id="copyBtn" onclick="copyScript()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="8" y="8" width="13" height="13" rx="2"/>
+                <path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/>
+            </svg>
+            <span>COPY SCRIPT</span>
+        </button>
+
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">⌘</div>
+                <div class="feature-title">Easy Access</div>
+                <div class="feature-desc">One-click copying</div>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">⚡</div>
+                <div class="feature-title">Keyless</div>
+                <div class="feature-desc">No key system</div>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">◈</div>
+                <div class="feature-title">Lightweight</div>
+                <div class="feature-desc">Simple loader</div>
+            </div>
+        </div>
+
+    </section>
+
+    <div class="notice">
+        <strong>NOTE:</strong> Make sure you're using a supported
+        executor and the latest version of the script.
     </div>
 
-    <script>
-        function copyScript() {
-            const text = document.getElementById("script").innerText.trim();
-            navigator.clipboard.writeText(text).then(() => {
-                const btn = document.getElementById("btn");
-                btn.textContent = "Copied!";
-                btn.classList.add("copied");
-                setTimeout(() => {
-                    btn.textContent = "Copy Script";
-                    btn.classList.remove("copied");
-                }, 2000);
+</main>
+
+<footer>
+    <span>© 2026 <strong>MYTHIOS</strong>. All rights reserved.</span>
+    <span>Designed for simplicity.</span>
+</footer>
+
+</div>
+
+<div class="toast" id="toast">✓ Script copied successfully!</div>
+
+<script>
+const button = document.getElementById('copyBtn');
+const toast = document.getElementById('toast');
+
+async function copyScript() {
+    const script = document.getElementById('script').textContent.trim();
+
+    try {
+        await navigator.clipboard.writeText(script);
+
+        button.classList.add('success');
+        button.querySelector('span').textContent = 'COPIED SUCCESSFULLY';
+        toast.classList.add('show');
+
+        // Track copy clicks with GoatCounter
+        if (window.goatcounter) {
+            window.goatcounter.count({
+                path: 'copy-script',
+                title: 'Copy Script',
+                event: true
             });
         }
-    </script>
+
+        setTimeout(() => {
+            button.classList.remove('success');
+            button.querySelector('span').textContent = 'COPY SCRIPT';
+            toast.classList.remove('show');
+        }, 2200);
+
+    } catch (error) {
+        toast.textContent = 'Unable to copy. Please check browser permissions.';
+        toast.classList.add('show');
+
+        setTimeout(() => {
+            toast.classList.remove('show');
+            toast.textContent = '✓ Script copied successfully!';
+        }, 2500);
+    }
+}
+</script>
+
 </body>
 </html>
