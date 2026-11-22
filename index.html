@@ -1,813 +1,453 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#080a0c">
-
-<title>Mythios — Anime Adventures</title>
-<meta name="description" content="Official Mythios script hub. Access the Anime Adventures script loader.">
-
-<!-- ANALYTICS: Replace YOURCODE with your GoatCounter code -->
-<script>
-const ANALYTICS_CODE = "YOURCODE";
-if (ANALYTICS_CODE !== "YOURCODE") {
-    const analytics = document.createElement("script");
-    analytics.dataset.goatcounter =
-        `https://${ANALYTICS_CODE}.goatcounter.com/count`;
-    analytics.async = true;
-    analytics.src = "https://gc.zgo.at/count.js";
-    document.head.appendChild(analytics);
-}
-</script>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-
-<style>
-:root {
-    --bg: #080a0c;
-    --panel: #0e1215;
-    --panel2: #12191a;
-    --border: rgba(255,255,255,.075);
-    --green: #75edaa;
-    --green2: #36bd7b;
-    --white: #f2f6f3;
-    --muted: #7b8982;
-    --mono: 'DM Mono', monospace;
-    --font: 'Inter', sans-serif;
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
-body {
-    background: var(--bg);
-    color: var(--white);
-    font-family: var(--font);
-    min-height: 100vh;
-    overflow-x: hidden;
-}
-
-button {
-    font: inherit;
-}
-
-button:focus-visible {
-    outline: 2px solid var(--green);
-    outline-offset: 4px;
-}
-
-::selection {
-    background: rgba(117,237,170,.25);
-    color: white;
-}
-
-/* BACKGROUND */
-
-.background {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    overflow: hidden;
-    z-index: 0;
-}
-
-.ambient {
-    position: absolute;
-    width: 600px;
-    height: 600px;
-    top: -420px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(58,195,123,.13);
-    filter: blur(110px);
-    border-radius: 50%;
-}
-
-.grid-bg {
-    position: absolute;
-    inset: 0;
-    background-image:
-        linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
-    background-size: 52px 52px;
-    mask-image: linear-gradient(to bottom, black, transparent 75%);
-}
-
-/* LAYOUT */
-
-.wrapper {
-    position: relative;
-    z-index: 1;
-    width: min(100% - 40px, 1050px);
-    margin: auto;
-}
-
-/* NAVIGATION */
-
-.navbar {
-    height: 82px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid var(--border);
-}
-
-.brand {
-    display: flex;
-    align-items: center;
-    gap: 11px;
-    text-decoration: none;
-    color: white;
-}
-
-.brand-icon {
-    width: 39px;
-    height: 39px;
-    border-radius: 12px;
-    background: linear-gradient(145deg, #9af5be, #35ad73);
-    display: grid;
-    place-items: center;
-    color: #07150d;
-    font-size: 20px;
-    font-weight: 900;
-    box-shadow: 0 0 25px rgba(74,220,143,.15);
-}
-
-.brand-name {
-    font-size: 17px;
-    font-weight: 900;
-    letter-spacing: -1px;
-}
-
-.brand-name span {
-    color: var(--green);
-}
-
-.nav-right {
-    display: flex;
-    align-items: center;
-    gap: 17px;
-}
-
-.nav-status {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 12px;
-    background: rgba(117,237,170,.045);
-    border: 1px solid rgba(117,237,170,.13);
-    border-radius: 30px;
-    font-size: 10px;
-    color: var(--green);
-    font-weight: 600;
-}
-
-.status-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--green);
-    box-shadow: 0 0 10px var(--green);
-}
-
-/* HERO */
-
-.hero {
-    text-align: center;
-    padding: 105px 0 65px;
-    animation: enter .8s ease both;
-}
-
-.eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 9px;
-    color: var(--green);
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    margin-bottom: 27px;
-}
-
-.eyebrow::before,
-.eyebrow::after {
-    content: "";
-    width: 22px;
-    height: 1px;
-    background: rgba(117,237,170,.4);
-}
-
-.hero h1 {
-    font-size: clamp(42px, 8vw, 76px);
-    font-weight: 900;
-    letter-spacing: -4px;
-    line-height: 1.02;
-    margin-bottom: 20px;
-}
-
-.hero h1 span {
-    background: linear-gradient(100deg, #a2f5bf, #4bc888);
-    color: transparent;
-    background-clip: text;
-    -webkit-background-clip: text;
-}
-
-.hero p {
-    max-width: 470px;
-    margin: auto;
-    color: var(--muted);
-    font-size: 13px;
-    line-height: 1.9;
-}
-
-/* MAIN CONTENT */
-
-.content {
-    max-width: 680px;
-    margin: auto;
-    animation: enter .9s .1s ease both;
-}
-
-.script-card {
-    background: linear-gradient(145deg, rgba(19,26,23,.97), rgba(12,16,17,.98));
-    border: 1px solid rgba(255,255,255,.09);
-    border-radius: 19px;
-    padding: 25px;
-    box-shadow: 0 25px 90px rgba(0,0,0,.28);
-    position: relative;
-    overflow: hidden;
-}
-
-.script-card::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 8%;
-    right: 8%;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(117,237,170,.45), transparent);
-}
-
-.card-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 25px;
-}
-
-.game-info {
-    display: flex;
-    align-items: center;
-    gap: 13px;
-}
-
-.game-logo {
-    width: 48px;
-    height: 48px;
-    border-radius: 13px;
-    background: linear-gradient(145deg, #1b3527, #12231b);
-    border: 1px solid rgba(117,237,170,.18);
-    display: grid;
-    place-items: center;
-    color: var(--green);
-    font-weight: 900;
-    font-size: 19px;
-}
-
-.game-title {
-    font-size: 14px;
-    font-weight: 800;
-    letter-spacing: -.3px;
-}
-
-.game-subtitle {
-    color: var(--muted);
-    font-size: 10px;
-    margin-top: 5px;
-}
-
-.version {
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--green);
-    background: rgba(117,237,170,.06);
-    border: 1px solid rgba(117,237,170,.13);
-    border-radius: 7px;
-    padding: 8px 10px;
-}
-
-/* CODE PANEL */
-
-.code-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 11px;
-}
-
-.code-header span:first-child {
-    color: #9ca9a0;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 1px;
-}
-
-.code-language {
-    color: var(--muted);
-    font-family: var(--mono);
-    font-size: 10px;
-}
-
-.code-panel {
-    position: relative;
-    background: #090d0b;
-    border: 1px solid #28342d;
-    border-radius: 12px;
-    padding: 21px 19px;
-    overflow: hidden;
-    margin-bottom: 15px;
-}
-
-.code-panel::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 3px;
-    background: linear-gradient(to bottom, var(--green), transparent);
-}
-
-.code-top {
-    display: flex;
-    gap: 6px;
-    margin-bottom: 17px;
-}
-
-.code-top i {
-    width: 7px;
-    height: 7px;
-    background: #344039;
-    border-radius: 50%;
-}
-
-#script {
-    display: block;
-    font-family: var(--mono);
-    color: #8fe8ad;
-    font-size: 11px;
-    line-height: 1.9;
-    white-space: pre-wrap;
-    overflow-wrap: anywhere;
-    user-select: text;
-}
-
-/* COPY BUTTON */
-
-.copy-btn {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 11px;
-    padding: 16px;
-    border: 1px solid #86f3b1;
-    border-radius: 10px;
-    background: linear-gradient(105deg, #8af0b1, #49cc85);
-    color: #08150d;
-    font-size: 12px;
-    font-weight: 900;
-    letter-spacing: .7px;
-    cursor: pointer;
-    transition: transform .2s, filter .2s, background .2s;
-}
-
-.copy-btn:hover {
-    filter: brightness(1.08);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 28px rgba(73,204,133,.14);
-}
-
-.copy-btn:active {
-    transform: scale(.99);
-}
-
-.copy-btn.success {
-    background: #1d6843;
-    border-color: #347b53;
-    color: white;
-    box-shadow: none;
-}
-
-.copy-btn svg {
-    width: 16px;
-    height: 16px;
-    flex-shrink: 0;
-}
-
-/* FEATURES */
-
-.features {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 11px;
-    margin-top: 17px;
-}
-
-.feature {
-    background: rgba(255,255,255,.018);
-    border: 1px solid var(--border);
-    border-radius: 11px;
-    padding: 16px 10px;
-    text-align: center;
-    transition: border-color .2s, transform .2s;
-}
-
-.feature:hover {
-    border-color: rgba(117,237,170,.25);
-    transform: translateY(-3px);
-}
-
-.feature-icon {
-    color: var(--green);
-    font-size: 19px;
-    margin-bottom: 10px;
-}
-
-.feature-title {
-    font-size: 10px;
-    font-weight: 800;
-}
-
-.feature-desc {
-    font-size: 9px;
-    color: var(--muted);
-    margin-top: 5px;
-}
-
-/* INFORMATION */
-
-.info-panel {
-    margin-top: 35px;
-    padding: 20px 0;
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-}
-
-.info-item {
-    display: flex;
-    align-items: center;
-    gap: 11px;
-}
-
-.info-icon {
-    width: 35px;
-    height: 35px;
-    border: 1px solid var(--border);
-    border-radius: 9px;
-    display: grid;
-    place-items: center;
-    color: var(--green);
-    font-size: 14px;
-}
-
-.info-label {
-    color: var(--muted);
-    font-size: 9px;
-    margin-bottom: 4px;
-}
-
-.info-value {
-    font-size: 11px;
-    font-weight: 700;
-}
-
-/* FOOTER */
-
-footer {
-    margin-top: 65px;
-    border-top: 1px solid var(--border);
-    padding: 23px 0 30px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: #66736b;
-    font-size: 10px;
-    gap: 15px;
-}
-
-footer strong {
-    color: #b6c5ba;
-}
-
-.footer-mark {
-    font-family: var(--mono);
-    letter-spacing: 1px;
-}
-
-/* TOAST */
-
-.toast {
-    position: fixed;
-    z-index: 10;
-    left: 50%;
-    bottom: 28px;
-    transform: translate(-50%, 20px);
-    opacity: 0;
-    pointer-events: none;
-    padding: 13px 19px;
-    border: 1px solid #356849;
-    border-radius: 10px;
-    background: #12251a;
-    color: var(--green);
-    font-size: 11px;
-    font-weight: 700;
-    white-space: nowrap;
-    transition: .25s ease;
-}
-
-.toast.show {
-    opacity: 1;
-    transform: translate(-50%, 0);
-}
-
-@keyframes enter {
-    from { opacity: 0; transform: translateY(17px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* RESPONSIVE */
-
-@media(max-width: 600px) {
-    .wrapper {
-        width: calc(100% - 32px);
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#090a12">
+  <meta name="description" content="The official Mythios hub for Anime Adventures. Get the script loader and access details.">
+  <meta property="og:title" content="Mythios — Anime Adventures">
+  <meta property="og:description" content="The official Mythios script hub.">
+  <meta property="og:type" content="website">
+  <title>Mythios — Anime Adventures</title>
+
+  <!-- GoatCounter: replace YOURCODE with your actual GoatCounter site code when ready. -->
+  <script>
+    const ANALYTICS_CODE = "YOURCODE";
+    if (ANALYTICS_CODE !== "YOURCODE") {
+      const analytics = document.createElement("script");
+      analytics.dataset.goatcounter = `https://${ANALYTICS_CODE}.goatcounter.com/count`;
+      analytics.async = true;
+      analytics.src = "https://gc.zgo.at/count.js";
+      document.head.appendChild(analytics);
+    }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #090a12;
+      --surface: #10121d;
+      --surface-2: #151827;
+      --surface-3: #1b2031;
+      --line: rgba(255,255,255,.085);
+      --text: #f4f5fb;
+      --muted: #9298ad;
+      --soft: #c4c8d7;
+      --accent: #a78bfa;
+      --accent-2: #6d5ce8;
+      --cyan: #78dce8;
+      --success: #8ee6b2;
+      --mono: "DM Mono", monospace;
+      --font: "Manrope", sans-serif;
+      --width: 1120px;
     }
 
-    .navbar {
-        height: 72px;
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      background:
+        radial-gradient(ellipse at 50% -15%, rgba(109,92,232,.18), transparent 42rem),
+        radial-gradient(ellipse at 100% 55%, rgba(57,150,178,.07), transparent 34rem),
+        var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+    ::selection { background: rgba(167,139,250,.35); color: white; }
+    :focus-visible { outline: 2px solid var(--cyan); outline-offset: 4px; }
+
+    .ambient-grid {
+      position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      opacity: .2;
+      background-image: linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 54px 54px;
+      mask-image: linear-gradient(to bottom, black, transparent 78%);
+    }
+    .orb {
+      position: fixed; z-index: -1; pointer-events: none; border-radius: 50%;
+      filter: blur(100px); opacity: .16;
+    }
+    .orb-one { width: 300px; height: 300px; background: #7958e8; top: 18%; left: -210px; }
+    .orb-two { width: 260px; height: 260px; background: #2d9caf; right: -190px; top: 58%; }
+
+    .wrap { width: min(var(--width), calc(100% - 48px)); margin-inline: auto; }
+    .nav {
+      height: 82px; display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--line);
+    }
+    .brand { display: inline-flex; align-items: center; gap: 12px; }
+    .brand-mark {
+      width: 39px; height: 39px; display: grid; place-items: center;
+      border: 1px solid rgba(197,180,255,.35); border-radius: 12px;
+      background: linear-gradient(145deg, rgba(167,139,250,.28), rgba(109,92,232,.12));
+      color: #d8ccff; font-weight: 800; font-size: 18px;
+      box-shadow: 0 0 28px rgba(130,105,235,.15), inset 0 1px rgba(255,255,255,.12);
+    }
+    .brand-name { font-size: 15px; font-weight: 800; letter-spacing: .12em; }
+    .brand-name span { color: var(--accent); }
+    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-links a { color: var(--muted); font-size: 12px; font-weight: 700; transition: color .2s; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-pill {
+      border: 1px solid var(--line); border-radius: 999px; padding: 9px 13px;
+      color: var(--soft); background: rgba(255,255,255,.025);
+      font-family: var(--mono); font-size: 10px; letter-spacing: .08em;
     }
 
-    .hero {
-        padding: 78px 0 45px;
+    .hero { padding: 91px 0 58px; text-align: center; animation: rise .7s ease both; }
+    .kicker {
+      display: inline-flex; align-items: center; gap: 9px; margin-bottom: 23px;
+      color: #c2b4ff; font-size: 10px; font-weight: 800; letter-spacing: .2em;
+      text-transform: uppercase;
     }
-
+    .kicker::before, .kicker::after { content: ""; width: 24px; height: 1px; background: rgba(167,139,250,.55); }
     .hero h1 {
-        letter-spacing: -2.5px;
+      max-width: 850px; margin: 0 auto 18px; font-size: clamp(43px, 8vw, 82px);
+      line-height: .99; letter-spacing: -.075em; font-weight: 800;
     }
+    .hero h1 span {
+      background: linear-gradient(100deg, #d7caff 5%, #9c87fa 52%, #79dbe7 100%);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .hero-copy { max-width: 510px; margin: auto; color: var(--muted); font-size: 13px; line-height: 1.9; }
+    .hero-tags { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 25px; }
+    .tag {
+      padding: 7px 11px; border: 1px solid var(--line); border-radius: 999px;
+      background: rgba(255,255,255,.025); color: #b8bdd0; font-size: 10px; font-weight: 700;
+    }
+    .tag::before { content: "✦"; color: var(--accent); margin-right: 7px; }
 
-    .hero p {
-        font-size: 12px;
+    .main-grid {
+      display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(250px, .8fr);
+      gap: 17px; align-items: stretch; animation: rise .8s .08s ease both;
     }
+    .panel {
+      position: relative; overflow: hidden; border: 1px solid var(--line); border-radius: 19px;
+      background: linear-gradient(145deg, rgba(20,23,37,.96), rgba(13,15,25,.97));
+      box-shadow: 0 24px 80px rgba(0,0,0,.24);
+    }
+    .loader { padding: 25px; }
+    .loader::before {
+      content: ""; position: absolute; top: 0; left: 12%; right: 12%; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(167,139,250,.75), transparent);
+    }
+    .panel-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 25px; }
+    .game { display: flex; align-items: center; gap: 13px; min-width: 0; }
+    .game-icon {
+      flex: 0 0 48px; height: 48px; display: grid; place-items: center; border-radius: 14px;
+      border: 1px solid rgba(167,139,250,.25);
+      background: linear-gradient(145deg, rgba(167,139,250,.2), rgba(109,92,232,.08));
+      color: #d5caff; font-size: 19px; font-weight: 800;
+    }
+    .game-title { font-size: 14px; font-weight: 800; }
+    .game-sub { margin-top: 4px; color: var(--muted); font-size: 10px; }
+    .version {
+      flex-shrink: 0; padding: 8px 10px; border: 1px solid rgba(167,139,250,.2);
+      border-radius: 8px; background: rgba(167,139,250,.07); color: #c7baff;
+      font: 10px var(--mono);
+    }
+    .section-label { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+    .section-label strong { color: #c7cada; font-size: 10px; letter-spacing: .13em; }
+    .section-label span { color: #777f97; font: 10px var(--mono); }
+    .codebox {
+      position: relative; padding: 17px 17px 18px; margin-bottom: 14px; overflow: hidden;
+      border: 1px solid rgba(167,139,250,.17); border-radius: 12px; background: #090b13;
+    }
+    .code-dots { display: flex; gap: 6px; margin-bottom: 15px; }
+    .code-dots i { width: 7px; height: 7px; border-radius: 50%; background: #3b3d52; }
+    .code-dots i:first-child { background: #a77d9a; }
+    .code-dots i:nth-child(2) { background: #b99b70; }
+    .code-dots i:nth-child(3) { background: #719d8a; }
+    #script {
+      display: block; color: #c6b9ff; font: 11px/1.9 var(--mono);
+      white-space: pre-wrap; overflow-wrap: anywhere; user-select: text;
+    }
+    .copy-btn {
+      width: 100%; min-height: 51px; display: flex; justify-content: center; align-items: center;
+      gap: 10px; border: 1px solid rgba(211,200,255,.7); border-radius: 10px;
+      background: linear-gradient(105deg, #c4b2ff, #927cf1 65%, #7acbdc);
+      color: #11101c; font-size: 11px; font-weight: 800; letter-spacing: .1em;
+      cursor: pointer; transition: transform .2s, filter .2s, box-shadow .2s;
+    }
+    .copy-btn:hover { transform: translateY(-2px); filter: brightness(1.07); box-shadow: 0 10px 30px rgba(142,119,241,.2); }
+    .copy-btn:active { transform: scale(.99); }
+    .copy-btn:disabled { cursor: wait; opacity: .8; }
+    .copy-btn svg { width: 16px; height: 16px; }
+    .copy-note { margin-top: 10px; color: #777f96; text-align: center; font-size: 10px; line-height: 1.6; }
 
-    .script-card {
-        padding: 18px;
+    .side-stack { display: grid; gap: 17px; }
+    .side-card { padding: 21px; }
+    .side-title { margin-bottom: 15px; font-size: 12px; font-weight: 800; }
+    .side-copy { color: var(--muted); font-size: 11px; line-height: 1.8; }
+    .benefits { display: grid; gap: 13px; }
+    .benefit { display: flex; align-items: flex-start; gap: 11px; }
+    .benefit-icon {
+      width: 29px; height: 29px; flex: 0 0 29px; display: grid; place-items: center;
+      border: 1px solid rgba(167,139,250,.18); border-radius: 9px;
+      background: rgba(167,139,250,.07); color: #c3b4ff; font-size: 12px;
     }
+    .benefit strong { display: block; margin: 1px 0 3px; font-size: 10px; }
+    .benefit span { display: block; color: var(--muted); font-size: 10px; line-height: 1.55; }
+    .notice {
+      padding: 13px 14px; border: 1px solid rgba(120,220,232,.14); border-radius: 11px;
+      background: rgba(120,220,232,.045); color: #aebdc7; font-size: 10px; line-height: 1.7;
+    }
+    .notice b { color: var(--cyan); }
 
-    .features {
-        gap: 7px;
+    .lower { display: grid; grid-template-columns: 1fr 1fr; gap: 17px; margin-top: 17px; }
+    .lower .panel { padding: 23px; }
+    .heading-row { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+    .heading-mark {
+      width: 30px; height: 30px; display: grid; place-items: center; border-radius: 9px;
+      background: rgba(167,139,250,.1); color: #c9bbff; font-size: 13px;
     }
+    .heading-row h2 { font-size: 12px; font-weight: 800; }
+    .steps { display: grid; gap: 13px; }
+    .step { display: flex; gap: 12px; align-items: flex-start; }
+    .step-num {
+      width: 23px; height: 23px; flex: 0 0 23px; display: grid; place-items: center;
+      border: 1px solid var(--line); border-radius: 7px; color: #c6b8ff; font: 10px var(--mono);
+    }
+    .step p { color: var(--muted); font-size: 10px; line-height: 1.7; }
+    .step strong { color: var(--soft); }
+    .release-empty {
+      padding: 15px; border: 1px dashed rgba(255,255,255,.12); border-radius: 11px;
+      color: var(--muted); font-size: 10px; line-height: 1.8;
+    }
+    .release-empty strong { display: block; margin-bottom: 4px; color: var(--soft); font-size: 11px; }
 
-    .feature {
-        padding: 13px 5px;
+    .footer {
+      margin-top: 52px; padding: 22px 0 28px; border-top: 1px solid var(--line);
+      display: flex; align-items: center; justify-content: space-between; gap: 14px;
+      color: #73798d; font-size: 10px;
     }
+    .footer strong { color: #c4c7d5; }
+    .footer-mark { color: #858ba1; font: 10px var(--mono); letter-spacing: .12em; }
+    .toast {
+      position: fixed; z-index: 10; left: 50%; bottom: 25px; transform: translate(-50%, 14px);
+      opacity: 0; pointer-events: none; padding: 12px 16px; border: 1px solid rgba(142,230,178,.3);
+      border-radius: 10px; background: #14231d; color: var(--success);
+      box-shadow: 0 12px 40px rgba(0,0,0,.35); font-size: 11px; font-weight: 800;
+      transition: opacity .22s, transform .22s;
+    }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
-    .info-panel {
-        grid-template-columns: 1fr 1fr;
+    @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+    @media (max-width: 780px) {
+      .main-grid { grid-template-columns: 1fr; }
+      .side-stack { grid-template-columns: 1fr 1fr; }
     }
-
-    footer {
-        flex-direction: column;
-        text-align: center;
-        margin-top: 45px;
+    @media (max-width: 560px) {
+      .wrap { width: min(100% - 30px, var(--width)); }
+      .nav { height: 70px; }
+      .nav-links { gap: 14px; }
+      .nav-links a { font-size: 10px; }
+      .nav-pill { display: none; }
+      .hero { padding: 72px 0 42px; }
+      .hero h1 { letter-spacing: -.065em; }
+      .hero-copy { font-size: 12px; }
+      .loader { padding: 18px; }
+      .side-stack, .lower { grid-template-columns: 1fr; }
+      .footer { flex-direction: column; text-align: center; }
     }
-}
-
-@media(prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-        animation: none !important;
-        transition: none !important;
-        scroll-behavior: auto !important;
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
     }
-}
-</style>
+  </style>
 </head>
 
 <body>
+  <div class="ambient-grid" aria-hidden="true"></div>
+  <div class="orb orb-one" aria-hidden="true"></div>
+  <div class="orb orb-two" aria-hidden="true"></div>
 
-<div class="background">
-    <div class="ambient"></div>
-    <div class="grid-bg"></div>
-</div>
-
-<div class="wrapper">
-
-    <!-- NAVIGATION -->
-    <header class="navbar">
-        <a href="/" class="brand">
-            <div class="brand-icon">M</div>
-            <div class="brand-name">MYTHIOS<span>.</span></div>
-        </a>
-
-        <div class="nav-right">
-            <div class="nav-status">
-                <span class="status-dot"></span>
-                SCRIPT HUB
-            </div>
-        </div>
+  <div class="wrap">
+    <header class="nav">
+      <a class="brand" href="#top" aria-label="Mythios home">
+        <span class="brand-mark">M</span>
+        <span class="brand-name">MYTHIOS<span>.</span></span>
+      </a>
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="#loader">Script</a>
+        <span class="nav-pill">OFFICIAL HUB</span>
+      </nav>
     </header>
 
-    <!-- HERO -->
-    <section class="hero">
-        <div class="eyebrow">THE MYTHIOS EXPERIENCE</div>
-
+    <main id="top">
+      <section class="hero">
+        <div class="kicker">A BETTER WAY TO ACCESS YOUR SCRIPT</div>
         <h1>Anime <span>Adventures.</span></h1>
-
-        <p>
-            Everything you need, right where you need it.
-            Access the Mythios script loader with one simple click.
+        <p class="hero-copy">
+          Welcome to the Mythios hub. Find the loader, copy it in one click,
+          and get back to the game without the extra steps.
         </p>
-    </section>
+        <div class="hero-tags">
+          <span class="tag">One-click copy</span>
+          <span class="tag">Keyless access</span>
+          <span class="tag">Lightweight loader</span>
+        </div>
+      </section>
 
-    <!-- MAIN -->
-    <main class="content">
-
-        <section class="script-card">
-
-            <div class="card-top">
-                <div class="game-info">
-                    <div class="game-logo">A</div>
-                    <div>
-                        <div class="game-title">Anime Adventures</div>
-                        <div class="game-subtitle">Official Mythios Loader</div>
-                    </div>
-                </div>
-
-                <div class="version">LUA / 001</div>
+      <section class="main-grid" id="loader" aria-label="Script loader">
+        <div class="panel loader">
+          <div class="panel-head">
+            <div class="game">
+              <div class="game-icon">A</div>
+              <div>
+                <div class="game-title">Anime Adventures</div>
+                <div class="game-sub">MYTHIOS SCRIPT LOADER</div>
+              </div>
             </div>
+            <div class="version">LUA / LOADER</div>
+          </div>
 
-            <div class="code-header">
-                <span>YOUR SCRIPT</span>
-                <span class="code-language">LOADSTRING</span>
+          <div class="section-label">
+            <strong>YOUR SCRIPT</strong>
+            <span>LOADSTRING</span>
+          </div>
+          <div class="codebox">
+            <div class="code-dots" aria-hidden="true"><i></i><i></i><i></i></div>
+            <code id="script">loadstring(game:HttpGet("https://raw.githubusercontent.com/Mythios4/AnimeAdventures/refs/heads/main/script.lua"))()</code>
+          </div>
+
+          <button class="copy-btn" id="copyBtn" type="button">
+            <svg id="copyIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="8" y="8" width="13" height="13" rx="2"></rect>
+              <path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"></path>
+            </svg>
+            <span id="copyLabel">COPY SCRIPT</span>
+          </button>
+          <p class="copy-note">Tap once to copy the loader to your clipboard.</p>
+        </div>
+
+        <aside class="side-stack">
+          <div class="panel side-card">
+            <h2 class="side-title">Why Mythios?</h2>
+            <div class="benefits">
+              <div class="benefit">
+                <div class="benefit-icon">⌘</div>
+                <div><strong>Quick access</strong><span>Copy the loader directly from this page.</span></div>
+              </div>
+              <div class="benefit">
+                <div class="benefit-icon">◇</div>
+                <div><strong>Keyless</strong><span>No key system is listed for this loader.</span></div>
+              </div>
+              <div class="benefit">
+                <div class="benefit-icon">↗</div>
+                <div><strong>Simple setup</strong><span>A single loader line to get started.</span></div>
+              </div>
             </div>
+          </div>
+          <div class="panel side-card">
+            <h2 class="side-title">About Mythios</h2>
+            <p class="side-copy">
+              A dedicated hub for the Mythios Anime Adventures script.
+              Simple access, a clean interface, and convenient updates in one place.
+            </p>
+            <div style="height:12px"></div>
+            <div class="notice"><b>MYTHIOS</b> — made for a smoother script access experience.</div>
+          </div>
+        </aside>
+      </section>
 
-            <div class="code-panel">
-                <div class="code-top">
-                    <i></i><i></i><i></i>
-                </div>
-
-                <code id="script">loadstring(game:HttpGet("https://raw.githubusercontent.com/Mythios4/AnimeAdventures/refs/heads/main/script.lua"))()</code>
-            </div>
-
-            <button class="copy-btn" id="copyBtn" onclick="copyScript()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="8" y="8" width="13" height="13" rx="2"/>
-                    <path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/>
-                </svg>
-                <span>COPY SCRIPT</span>
-            </button>
-
-            <div class="features">
-                <div class="feature">
-                    <div class="feature-icon">⌘</div>
-                    <div class="feature-title">One Click</div>
-                    <div class="feature-desc">Quick copying</div>
-                </div>
-
-                <div class="feature">
-                    <div class="feature-icon">⚡</div>
-                    <div class="feature-title">Keyless</div>
-                    <div class="feature-desc">No key system</div>
-                </div>
-
-                <div class="feature">
-                    <div class="feature-icon">◈</div>
-                    <div class="feature-title">Lightweight</div>
-                    <div class="feature-desc">Simple loader</div>
-                </div>
-            </div>
-
-        </section>
-
-        <!-- INFORMATION -->
-        <section class="info-panel">
-
-            <div class="info-item">
-                <div class="info-icon">◉</div>
-                <div>
-                    <div class="info-label">PLATFORM</div>
-                    <div class="info-value">Roblox</div>
-                </div>
-            </div>
-
-            <div class="info-item">
-                <div class="info-icon">⌁</div>
-                <div>
-                    <div class="info-label">SCRIPT TYPE</div>
-                    <div class="info-value">Lua Loader</div>
-                </div>
-            </div>
-
-            <div class="info-item">
-                <div class="info-icon">◇</div>
-                <div>
-                    <div class="info-label">ACCESS</div>
-                    <div class="info-value">Keyless</div>
-                </div>
-            </div>
-
-            <div class="info-item">
-                <div class="info-icon">↗</div>
-                <div>
-                    <div class="info-label">DISTRIBUTION</div>
-                    <div class="info-value">Mythios Hub</div>
-                </div>
-            </div>
-
-        </section>
-
+      <section class="lower">
+        <div class="panel">
+          <div class="heading-row">
+            <div class="heading-mark">✦</div>
+            <h2>PROJECT NOTES</h2>
+          </div>
+          <div class="release-empty">
+            <strong>Mythios / Anime Adventures</strong>
+            This page provides the current loader link. Release notes and version history will be added here when they are available.
+          </div>
+        </div>
+      </section>
     </main>
 
-    <!-- FOOTER -->
-    <footer>
-        <div>© 2026 <strong>MYTHIOS</strong>. All rights reserved.</div>
-        <div class="footer-mark">BUILT DIFFERENT.</div>
+    <footer class="footer">
+      <div>© <span id="year"></span> <strong>MYTHIOS</strong>. Independent community project.</div>
+      <div class="footer-mark">BUILT WITH INTENT.</div>
     </footer>
+  </div>
 
-</div>
+  <div class="toast" id="toast" role="status" aria-live="polite">Script copied successfully.</div>
 
-<div class="toast" id="toast">✓ Script copied successfully!</div>
+  <script>
+    const copyButton = document.getElementById("copyBtn");
+    const copyLabel = document.getElementById("copyLabel");
+    const copyIcon = document.getElementById("copyIcon");
+    const toast = document.getElementById("toast");
+    let toastTimer;
+    let resetTimer;
 
-<script>
-const button = document.getElementById("copyBtn");
-const toast = document.getElementById("toast");
+    document.getElementById("year").textContent = new Date().getFullYear();
 
-let toastTimer;
-
-function trackEvent(path, title) {
-    if (window.goatcounter && typeof window.goatcounter.count === "function") {
-        window.goatcounter.count({
-            path: path,
-            title: title,
-            event: true
-        });
+    function trackEvent(path, title) {
+      if (window.goatcounter && typeof window.goatcounter.count === "function") {
+        window.goatcounter.count({ path, title, event: true });
+      }
     }
-}
 
-function showToast(message) {
-    toast.textContent = message;
-    toast.classList.add("show");
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove("show"), 2400);
+    }
 
-    clearTimeout(toastTimer);
+    function setCopyState(success) {
+      copyButton.classList.toggle("copied", success);
+      copyLabel.textContent = success ? "COPIED SUCCESSFULLY" : "COPY SCRIPT";
+      copyIcon.innerHTML = success
+        ? '<path d="M20 6 9 17l-5-5"></path>'
+        : '<rect x="8" y="8" width="13" height="13" rx="2"></rect><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"></path>';
+    }
 
-    toastTimer = setTimeout(() => {
-        toast.classList.remove("show");
-    }, 2300);
-}
+    async function copyText(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+        return;
+      }
+      const area = document.createElement("textarea");
+      area.value = text;
+      area.setAttribute("readonly", "");
+      area.style.position = "fixed";
+      area.style.opacity = "0";
+      document.body.appendChild(area);
+      area.select();
+      const copied = document.execCommand("copy");
+      area.remove();
+      if (!copied) throw new Error("Clipboard copy was blocked");
+    }
 
-async function copyScript() {
-    const script = document.getElementById("script").textContent.trim();
+    copyButton.addEventListener("click", async () => {
+      const scriptText = document.getElementById("script").textContent.trim();
+      copyButton.disabled = true;
+      copyLabel.textContent = "COPYING...";
 
-    try {
-        await navigator.clipboard.writeText(script);
-
-        button.classList.add("success");
-        button.querySelector("span").textContent = "COPIED SUCCESSFULLY";
-
-        button.querySelector("svg").innerHTML =
-            '<path d="M20 6L9 17l-5-5"/>';
-
-        showToast("✓ Script copied successfully!");
-
+      try {
+        await copyText(scriptText);
+        setCopyState(true);
+        showToast("✓ Script copied to clipboard");
         trackEvent("copy-script", "Copy Script");
-
-        setTimeout(() => {
-            button.classList.remove("success");
-            button.querySelector("span").textContent = "COPY SCRIPT";
-
-            button.querySelector("svg").innerHTML =
-                '<rect x="8" y="8" width="13" height="13" rx="2"/>' +
-                '<path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/>';
-        }, 2200);
-
-    } catch (error) {
-        showToast("Copy failed. Check browser permissions.");
-    }
-}
-</script>
-
+        clearTimeout(resetTimer);
+        resetTimer = setTimeout(() => setCopyState(false), 2400);
+      } catch (error) {
+        setCopyState(false);
+        showToast("Copy failed — select the code and copy it manually.");
+      } finally {
+        copyButton.disabled = false;
+      }
+    });
+  </script>
 </body>
 </html>
