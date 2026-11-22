@@ -4,13 +4,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#080b0a">
-<title>Mythios — Anime Adventures</title>
-<meta name="description" content="Mythios Anime Adventures Script Hub. Quick access to the latest script loader.">
+<meta name="theme-color" content="#080a0c">
 
-<!-- GoatCounter Analytics -->
-<script data-goatcounter="https://YOURCODE.goatcounter.com/count"
-        async src="https://gc.zgo.at/count.js"></script>
+<title>Mythios — Anime Adventures</title>
+<meta name="description" content="Official Mythios script hub. Access the Anime Adventures script loader.">
+
+<!-- ANALYTICS: Replace YOURCODE with your GoatCounter code -->
+<script>
+const ANALYTICS_CODE = "YOURCODE";
+if (ANALYTICS_CODE !== "YOURCODE") {
+    const analytics = document.createElement("script");
+    analytics.dataset.goatcounter =
+        `https://${ANALYTICS_CODE}.goatcounter.com/count`;
+    analytics.async = true;
+    analytics.src = "https://gc.zgo.at/count.js";
+    document.head.appendChild(analytics);
+}
+</script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,14 +28,16 @@
 
 <style>
 :root {
-    --bg: #080b0a;
-    --surface: #101613;
-    --surface2: #141c18;
+    --bg: #080a0c;
+    --panel: #0e1215;
+    --panel2: #12191a;
     --border: rgba(255,255,255,.075);
-    --green: #72e5a5;
-    --green2: #36bd79;
-    --text: #f0f5f1;
-    --muted: #84918a;
+    --green: #75edaa;
+    --green2: #36bd7b;
+    --white: #f2f6f3;
+    --muted: #7b8982;
+    --mono: 'DM Mono', monospace;
+    --font: 'Inter', sans-serif;
 }
 
 * {
@@ -34,51 +46,80 @@
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
-    min-height: 100vh;
     background: var(--bg);
-    color: var(--text);
-    font-family: 'Inter', sans-serif;
+    color: var(--white);
+    font-family: var(--font);
+    min-height: 100vh;
     overflow-x: hidden;
 }
 
-body::before {
-    content: "";
+button {
+    font: inherit;
+}
+
+button:focus-visible {
+    outline: 2px solid var(--green);
+    outline-offset: 4px;
+}
+
+::selection {
+    background: rgba(117,237,170,.25);
+    color: white;
+}
+
+/* BACKGROUND */
+
+.background {
     position: fixed;
     inset: 0;
     pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.ambient {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    top: -420px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(58,195,123,.13);
+    filter: blur(110px);
+    border-radius: 50%;
+}
+
+.grid-bg {
+    position: absolute;
+    inset: 0;
     background-image:
         linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
-    background-size: 45px 45px;
-    mask-image: linear-gradient(to bottom, black, transparent 85%);
+    background-size: 52px 52px;
+    mask-image: linear-gradient(to bottom, black, transparent 75%);
 }
 
-.glow {
-    position: fixed;
-    width: 500px;
-    height: 500px;
-    background: rgba(38, 174, 104, .09);
-    filter: blur(120px);
-    border-radius: 50%;
-    top: -300px;
-    left: 50%;
-    transform: translateX(-50%);
-    pointer-events: none;
-}
+/* LAYOUT */
 
-.container {
-    width: min(100% - 40px, 650px);
-    margin: auto;
+.wrapper {
     position: relative;
     z-index: 1;
+    width: min(100% - 40px, 1050px);
+    margin: auto;
 }
 
-header {
-    height: 85px;
+/* NAVIGATION */
+
+.navbar {
+    height: 82px;
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
     border-bottom: 1px solid var(--border);
 }
 
@@ -86,66 +127,53 @@ header {
     display: flex;
     align-items: center;
     gap: 11px;
+    text-decoration: none;
+    color: white;
+}
+
+.brand-icon {
+    width: 39px;
+    height: 39px;
+    border-radius: 12px;
+    background: linear-gradient(145deg, #9af5be, #35ad73);
+    display: grid;
+    place-items: center;
+    color: #07150d;
+    font-size: 20px;
+    font-weight: 900;
+    box-shadow: 0 0 25px rgba(74,220,143,.15);
+}
+
+.brand-name {
     font-size: 17px;
     font-weight: 900;
     letter-spacing: -1px;
 }
 
-.logo {
-    width: 38px;
-    height: 38px;
-    border-radius: 11px;
-    background: linear-gradient(145deg, #9af5bd, #37b778);
-    display: grid;
-    place-items: center;
-    color: #07150d;
-    font-weight: 900;
-    font-size: 20px;
-    box-shadow: 0 0 25px rgba(75, 220, 140, .15);
-}
-
-.brand span {
+.brand-name span {
     color: var(--green);
 }
 
-.header-right {
-    font-family: 'DM Mono', monospace;
-    color: var(--muted);
-    font-size: 10px;
-    letter-spacing: 1px;
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 17px;
 }
 
-main {
-    padding: 85px 0 65px;
-    animation: appear .7s ease both;
-}
-
-@keyframes appear {
-    from { opacity: 0; transform: translateY(15px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.intro {
-    text-align: center;
-    margin-bottom: 38px;
-}
-
-.badge {
-    display: inline-flex;
+.nav-status {
+    display: flex;
     align-items: center;
     gap: 8px;
-    border: 1px solid rgba(114,229,165,.18);
-    background: rgba(114,229,165,.06);
-    color: var(--green);
+    padding: 8px 12px;
+    background: rgba(117,237,170,.045);
+    border: 1px solid rgba(117,237,170,.13);
     border-radius: 30px;
-    padding: 8px 13px;
     font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 1.2px;
-    margin-bottom: 23px;
+    color: var(--green);
+    font-weight: 600;
 }
 
-.badge-dot {
+.status-dot {
     width: 6px;
     height: 6px;
     border-radius: 50%;
@@ -153,141 +181,222 @@ main {
     box-shadow: 0 0 10px var(--green);
 }
 
-h1 {
-    font-size: clamp(32px, 7vw, 48px);
-    font-weight: 900;
-    letter-spacing: -2.5px;
-    line-height: 1.1;
-    margin-bottom: 14px;
+/* HERO */
+
+.hero {
+    text-align: center;
+    padding: 105px 0 65px;
+    animation: enter .8s ease both;
 }
 
-h1 span {
+.eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
     color: var(--green);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 27px;
 }
 
-.description {
+.eyebrow::before,
+.eyebrow::after {
+    content: "";
+    width: 22px;
+    height: 1px;
+    background: rgba(117,237,170,.4);
+}
+
+.hero h1 {
+    font-size: clamp(42px, 8vw, 76px);
+    font-weight: 900;
+    letter-spacing: -4px;
+    line-height: 1.02;
+    margin-bottom: 20px;
+}
+
+.hero h1 span {
+    background: linear-gradient(100deg, #a2f5bf, #4bc888);
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+}
+
+.hero p {
+    max-width: 470px;
+    margin: auto;
     color: var(--muted);
     font-size: 13px;
-    line-height: 1.8;
-    max-width: 390px;
+    line-height: 1.9;
+}
+
+/* MAIN CONTENT */
+
+.content {
+    max-width: 680px;
     margin: auto;
+    animation: enter .9s .1s ease both;
 }
 
 .script-card {
-    background: linear-gradient(145deg, #131b16, #0e1310);
+    background: linear-gradient(145deg, rgba(19,26,23,.97), rgba(12,16,17,.98));
     border: 1px solid rgba(255,255,255,.09);
-    border-radius: 18px;
-    padding: 23px;
-    box-shadow: 0 25px 70px rgba(0,0,0,.3);
-}
-
-.card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 19px;
-}
-
-.card-title {
-    display: flex;
-    align-items: center;
-    gap: 11px;
-}
-
-.game-icon {
-    width: 39px;
-    height: 39px;
-    background: #1b3025;
-    border: 1px solid rgba(114,229,165,.15);
-    border-radius: 11px;
-    display: grid;
-    place-items: center;
-    color: var(--green);
-    font-size: 17px;
-    font-weight: 800;
-}
-
-.game-name {
-    font-size: 13px;
-    font-weight: 700;
-}
-
-.game-sub {
-    font-size: 10px;
-    color: var(--muted);
-    margin-top: 4px;
-}
-
-.lua-tag {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    color: var(--green);
-    background: rgba(114,229,165,.07);
-    padding: 7px 10px;
-    border-radius: 6px;
-    border: 1px solid rgba(114,229,165,.12);
-}
-
-.code-area {
-    background: #090d0b;
-    border: 1px solid #222e27;
-    border-radius: 11px;
-    padding: 19px;
+    border-radius: 19px;
+    padding: 25px;
+    box-shadow: 0 25px 90px rgba(0,0,0,.28);
     position: relative;
-    margin-bottom: 16px;
     overflow: hidden;
 }
 
-.code-area::before {
+.script-card::before {
     content: "";
     position: absolute;
     top: 0;
-    left: 0;
-    height: 100%;
-    width: 3px;
-    background: var(--green2);
+    left: 8%;
+    right: 8%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(117,237,170,.45), transparent);
 }
 
-.code-label {
-    color: #63736a;
-    font-size: 9px;
-    font-family: 'DM Mono', monospace;
+.card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+
+.game-info {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.game-logo {
+    width: 48px;
+    height: 48px;
+    border-radius: 13px;
+    background: linear-gradient(145deg, #1b3527, #12231b);
+    border: 1px solid rgba(117,237,170,.18);
+    display: grid;
+    place-items: center;
+    color: var(--green);
+    font-weight: 900;
+    font-size: 19px;
+}
+
+.game-title {
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: -.3px;
+}
+
+.game-subtitle {
+    color: var(--muted);
+    font-size: 10px;
+    margin-top: 5px;
+}
+
+.version {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--green);
+    background: rgba(117,237,170,.06);
+    border: 1px solid rgba(117,237,170,.13);
+    border-radius: 7px;
+    padding: 8px 10px;
+}
+
+/* CODE PANEL */
+
+.code-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 11px;
+}
+
+.code-header span:first-child {
+    color: #9ca9a0;
+    font-size: 10px;
+    font-weight: 700;
     letter-spacing: 1px;
-    margin-bottom: 12px;
+}
+
+.code-language {
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 10px;
+}
+
+.code-panel {
+    position: relative;
+    background: #090d0b;
+    border: 1px solid #28342d;
+    border-radius: 12px;
+    padding: 21px 19px;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+.code-panel::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 3px;
+    background: linear-gradient(to bottom, var(--green), transparent);
+}
+
+.code-top {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 17px;
+}
+
+.code-top i {
+    width: 7px;
+    height: 7px;
+    background: #344039;
+    border-radius: 50%;
 }
 
 #script {
     display: block;
-    color: #8be9ad;
-    font-family: 'DM Mono', monospace;
+    font-family: var(--mono);
+    color: #8fe8ad;
     font-size: 11px;
-    line-height: 1.8;
+    line-height: 1.9;
+    white-space: pre-wrap;
     overflow-wrap: anywhere;
     user-select: text;
 }
 
+/* COPY BUTTON */
+
 .copy-btn {
     width: 100%;
-    border: none;
-    border-radius: 10px;
-    background: linear-gradient(110deg, #79edaa, #48cc85);
-    color: #08150d;
-    font-size: 12px;
-    font-weight: 800;
-    letter-spacing: .5px;
-    padding: 16px;
-    cursor: pointer;
-    transition: .2s ease;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10px;
+    gap: 11px;
+    padding: 16px;
+    border: 1px solid #86f3b1;
+    border-radius: 10px;
+    background: linear-gradient(105deg, #8af0b1, #49cc85);
+    color: #08150d;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: .7px;
+    cursor: pointer;
+    transition: transform .2s, filter .2s, background .2s;
 }
 
 .copy-btn:hover {
     filter: brightness(1.08);
-    box-shadow: 0 5px 25px rgba(72,204,133,.18);
     transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(73,204,133,.14);
 }
 
 .copy-btn:active {
@@ -295,39 +404,50 @@ h1 span {
 }
 
 .copy-btn.success {
-    background: #1e6842;
+    background: #1d6843;
+    border-color: #347b53;
     color: white;
+    box-shadow: none;
 }
 
 .copy-btn svg {
     width: 16px;
     height: 16px;
+    flex-shrink: 0;
 }
+
+/* FEATURES */
 
 .features {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
+    gap: 11px;
     margin-top: 17px;
 }
 
 .feature {
-    padding: 15px 10px;
-    border: 1px solid var(--border);
     background: rgba(255,255,255,.018);
-    border-radius: 10px;
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    padding: 16px 10px;
     text-align: center;
+    transition: border-color .2s, transform .2s;
+}
+
+.feature:hover {
+    border-color: rgba(117,237,170,.25);
+    transform: translateY(-3px);
 }
 
 .feature-icon {
     color: var(--green);
-    font-size: 16px;
-    margin-bottom: 8px;
+    font-size: 19px;
+    margin-bottom: 10px;
 }
 
 .feature-title {
     font-size: 10px;
-    font-weight: 700;
+    font-weight: 800;
 }
 
 .feature-desc {
@@ -336,53 +456,88 @@ h1 span {
     margin-top: 5px;
 }
 
-.notice {
-    margin-top: 18px;
-    border: 1px solid rgba(114,229,165,.1);
-    background: rgba(114,229,165,.035);
-    padding: 14px;
-    border-radius: 10px;
-    color: var(--muted);
-    font-size: 10px;
-    line-height: 1.7;
-    text-align: center;
+/* INFORMATION */
+
+.info-panel {
+    margin-top: 35px;
+    padding: 20px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
 }
 
-.notice strong {
-    color: var(--green);
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 11px;
 }
+
+.info-icon {
+    width: 35px;
+    height: 35px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    display: grid;
+    place-items: center;
+    color: var(--green);
+    font-size: 14px;
+}
+
+.info-label {
+    color: var(--muted);
+    font-size: 9px;
+    margin-bottom: 4px;
+}
+
+.info-value {
+    font-size: 11px;
+    font-weight: 700;
+}
+
+/* FOOTER */
 
 footer {
-    padding: 23px 0 35px;
+    margin-top: 65px;
     border-top: 1px solid var(--border);
+    padding: 23px 0 30px;
     display: flex;
     justify-content: space-between;
-    gap: 12px;
+    align-items: center;
     color: #66736b;
     font-size: 10px;
+    gap: 15px;
 }
 
 footer strong {
-    color: #a2b1a7;
+    color: #b6c5ba;
 }
+
+.footer-mark {
+    font-family: var(--mono);
+    letter-spacing: 1px;
+}
+
+/* TOAST */
 
 .toast {
     position: fixed;
-    z-index: 5;
-    bottom: 25px;
+    z-index: 10;
     left: 50%;
-    transform: translate(-50%, 15px);
-    background: #17271d;
-    border: 1px solid #315b40;
+    bottom: 28px;
+    transform: translate(-50%, 20px);
+    opacity: 0;
+    pointer-events: none;
+    padding: 13px 19px;
+    border: 1px solid #356849;
+    border-radius: 10px;
+    background: #12251a;
     color: var(--green);
-    padding: 12px 18px;
-    border-radius: 9px;
     font-size: 11px;
     font-weight: 700;
-    opacity: 0;
-    transition: .25s;
-    pointer-events: none;
     white-space: nowrap;
+    transition: .25s ease;
 }
 
 .toast.show {
@@ -390,20 +545,62 @@ footer strong {
     transform: translate(-50%, 0);
 }
 
-@media(max-width: 500px) {
-    .container { width: calc(100% - 30px); }
-    header { height: 72px; }
-    main { padding: 65px 0 45px; }
-    .script-card { padding: 17px; }
-    .features { gap: 7px; }
-    .feature { padding: 13px 5px; }
-    footer { flex-direction: column; text-align: center; }
+@keyframes enter {
+    from { opacity: 0; transform: translateY(17px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* RESPONSIVE */
+
+@media(max-width: 600px) {
+    .wrapper {
+        width: calc(100% - 32px);
+    }
+
+    .navbar {
+        height: 72px;
+    }
+
+    .hero {
+        padding: 78px 0 45px;
+    }
+
+    .hero h1 {
+        letter-spacing: -2.5px;
+    }
+
+    .hero p {
+        font-size: 12px;
+    }
+
+    .script-card {
+        padding: 18px;
+    }
+
+    .features {
+        gap: 7px;
+    }
+
+    .feature {
+        padding: 13px 5px;
+    }
+
+    .info-panel {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    footer {
+        flex-direction: column;
+        text-align: center;
+        margin-top: 45px;
+    }
 }
 
 @media(prefers-reduced-motion: reduce) {
     *, *::before, *::after {
-        animation-duration: .01ms !important;
-        transition-duration: .01ms !important;
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
     }
 }
 </style>
@@ -411,135 +608,203 @@ footer strong {
 
 <body>
 
-<div class="glow"></div>
+<div class="background">
+    <div class="ambient"></div>
+    <div class="grid-bg"></div>
+</div>
 
-<div class="container">
+<div class="wrapper">
 
-<header>
-    <div class="brand">
-        <div class="logo">M</div>
-        MYTHIOS<span>.</span>
-    </div>
-    <div class="header-right">SCRIPT HUB / 001</div>
-</header>
+    <!-- NAVIGATION -->
+    <header class="navbar">
+        <a href="/" class="brand">
+            <div class="brand-icon">M</div>
+            <div class="brand-name">MYTHIOS<span>.</span></div>
+        </a>
 
-<main>
-
-    <section class="intro">
-        <div class="badge">
-            <span class="badge-dot"></span>
-            MYTHIOS SCRIPT DISTRIBUTION
+        <div class="nav-right">
+            <div class="nav-status">
+                <span class="status-dot"></span>
+                SCRIPT HUB
+            </div>
         </div>
+    </header>
 
-        <h1>Anime <span>Adventures</span></h1>
+    <!-- HERO -->
+    <section class="hero">
+        <div class="eyebrow">THE MYTHIOS EXPERIENCE</div>
 
-        <p class="description">
-            A simple and convenient way to access the Mythios
-            script. Copy the loader below and you're ready to go.
+        <h1>Anime <span>Adventures.</span></h1>
+
+        <p>
+            Everything you need, right where you need it.
+            Access the Mythios script loader with one simple click.
         </p>
     </section>
 
-    <section class="script-card">
+    <!-- MAIN -->
+    <main class="content">
 
-        <div class="card-header">
-            <div class="card-title">
-                <div class="game-icon">A</div>
-                <div>
-                    <div class="game-name">Anime Adventures</div>
-                    <div class="game-sub">Mythios Script Loader</div>
+        <section class="script-card">
+
+            <div class="card-top">
+                <div class="game-info">
+                    <div class="game-logo">A</div>
+                    <div>
+                        <div class="game-title">Anime Adventures</div>
+                        <div class="game-subtitle">Official Mythios Loader</div>
+                    </div>
+                </div>
+
+                <div class="version">LUA / 001</div>
+            </div>
+
+            <div class="code-header">
+                <span>YOUR SCRIPT</span>
+                <span class="code-language">LOADSTRING</span>
+            </div>
+
+            <div class="code-panel">
+                <div class="code-top">
+                    <i></i><i></i><i></i>
+                </div>
+
+                <code id="script">loadstring(game:HttpGet("https://raw.githubusercontent.com/Mythios4/AnimeAdventures/refs/heads/main/script.lua"))()</code>
+            </div>
+
+            <button class="copy-btn" id="copyBtn" onclick="copyScript()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="8" y="8" width="13" height="13" rx="2"/>
+                    <path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/>
+                </svg>
+                <span>COPY SCRIPT</span>
+            </button>
+
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">⌘</div>
+                    <div class="feature-title">One Click</div>
+                    <div class="feature-desc">Quick copying</div>
+                </div>
+
+                <div class="feature">
+                    <div class="feature-icon">⚡</div>
+                    <div class="feature-title">Keyless</div>
+                    <div class="feature-desc">No key system</div>
+                </div>
+
+                <div class="feature">
+                    <div class="feature-icon">◈</div>
+                    <div class="feature-title">Lightweight</div>
+                    <div class="feature-desc">Simple loader</div>
                 </div>
             </div>
-            <div class="lua-tag">LUA</div>
-        </div>
 
-        <div class="code-area">
-            <div class="code-label">SCRIPT / LOADSTRING</div>
-            <code id="script">loadstring(game:HttpGet("https://raw.githubusercontent.com/Mythios4/AnimeAdventures/refs/heads/main/script.lua"))()</code>
-        </div>
+        </section>
 
-        <button class="copy-btn" id="copyBtn" onclick="copyScript()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="8" y="8" width="13" height="13" rx="2"/>
-                <path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/>
-            </svg>
-            <span>COPY SCRIPT</span>
-        </button>
+        <!-- INFORMATION -->
+        <section class="info-panel">
 
-        <div class="features">
-            <div class="feature">
-                <div class="feature-icon">⌘</div>
-                <div class="feature-title">Easy Access</div>
-                <div class="feature-desc">One-click copying</div>
+            <div class="info-item">
+                <div class="info-icon">◉</div>
+                <div>
+                    <div class="info-label">PLATFORM</div>
+                    <div class="info-value">Roblox</div>
+                </div>
             </div>
 
-            <div class="feature">
-                <div class="feature-icon">⚡</div>
-                <div class="feature-title">Keyless</div>
-                <div class="feature-desc">No key system</div>
+            <div class="info-item">
+                <div class="info-icon">⌁</div>
+                <div>
+                    <div class="info-label">SCRIPT TYPE</div>
+                    <div class="info-value">Lua Loader</div>
+                </div>
             </div>
 
-            <div class="feature">
-                <div class="feature-icon">◈</div>
-                <div class="feature-title">Lightweight</div>
-                <div class="feature-desc">Simple loader</div>
+            <div class="info-item">
+                <div class="info-icon">◇</div>
+                <div>
+                    <div class="info-label">ACCESS</div>
+                    <div class="info-value">Keyless</div>
+                </div>
             </div>
-        </div>
 
-    </section>
+            <div class="info-item">
+                <div class="info-icon">↗</div>
+                <div>
+                    <div class="info-label">DISTRIBUTION</div>
+                    <div class="info-value">Mythios Hub</div>
+                </div>
+            </div>
 
-    <div class="notice">
-        <strong>NOTE:</strong> Make sure you're using a supported
-        executor and the latest version of the script.
-    </div>
+        </section>
 
-</main>
+    </main>
 
-<footer>
-    <span>© 2026 <strong>MYTHIOS</strong>. All rights reserved.</span>
-    <span>Designed for simplicity.</span>
-</footer>
+    <!-- FOOTER -->
+    <footer>
+        <div>© 2026 <strong>MYTHIOS</strong>. All rights reserved.</div>
+        <div class="footer-mark">BUILT DIFFERENT.</div>
+    </footer>
 
 </div>
 
 <div class="toast" id="toast">✓ Script copied successfully!</div>
 
 <script>
-const button = document.getElementById('copyBtn');
-const toast = document.getElementById('toast');
+const button = document.getElementById("copyBtn");
+const toast = document.getElementById("toast");
+
+let toastTimer;
+
+function trackEvent(path, title) {
+    if (window.goatcounter && typeof window.goatcounter.count === "function") {
+        window.goatcounter.count({
+            path: path,
+            title: title,
+            event: true
+        });
+    }
+}
+
+function showToast(message) {
+    toast.textContent = message;
+    toast.classList.add("show");
+
+    clearTimeout(toastTimer);
+
+    toastTimer = setTimeout(() => {
+        toast.classList.remove("show");
+    }, 2300);
+}
 
 async function copyScript() {
-    const script = document.getElementById('script').textContent.trim();
+    const script = document.getElementById("script").textContent.trim();
 
     try {
         await navigator.clipboard.writeText(script);
 
-        button.classList.add('success');
-        button.querySelector('span').textContent = 'COPIED SUCCESSFULLY';
-        toast.classList.add('show');
+        button.classList.add("success");
+        button.querySelector("span").textContent = "COPIED SUCCESSFULLY";
 
-        // Track copy clicks with GoatCounter
-        if (window.goatcounter) {
-            window.goatcounter.count({
-                path: 'copy-script',
-                title: 'Copy Script',
-                event: true
-            });
-        }
+        button.querySelector("svg").innerHTML =
+            '<path d="M20 6L9 17l-5-5"/>';
+
+        showToast("✓ Script copied successfully!");
+
+        trackEvent("copy-script", "Copy Script");
 
         setTimeout(() => {
-            button.classList.remove('success');
-            button.querySelector('span').textContent = 'COPY SCRIPT';
-            toast.classList.remove('show');
+            button.classList.remove("success");
+            button.querySelector("span").textContent = "COPY SCRIPT";
+
+            button.querySelector("svg").innerHTML =
+                '<rect x="8" y="8" width="13" height="13" rx="2"/>' +
+                '<path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/>';
         }, 2200);
 
     } catch (error) {
-        toast.textContent = 'Unable to copy. Please check browser permissions.';
-        toast.classList.add('show');
-
-        setTimeout(() => {
-            toast.classList.remove('show');
-            toast.textContent = '✓ Script copied successfully!';
-        }, 2500);
+        showToast("Copy failed. Check browser permissions.");
     }
 }
 </script>
