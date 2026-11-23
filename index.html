@@ -1,453 +1,260 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#090a12">
-  <meta name="description" content="The official Mythios hub for Anime Adventures. Get the script loader and access details.">
-  <meta property="og:title" content="Mythios — Anime Adventures">
-  <meta property="og:description" content="The official Mythios script hub.">
-  <meta property="og:type" content="website">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mythios — Anime Adventures</title>
-
-  <!-- GoatCounter: replace YOURCODE with your actual GoatCounter site code when ready. -->
-  <script>
-    const ANALYTICS_CODE = "YOURCODE";
-    if (ANALYTICS_CODE !== "YOURCODE") {
-      const analytics = document.createElement("script");
-      analytics.dataset.goatcounter = `https://${ANALYTICS_CODE}.goatcounter.com/count`;
-      analytics.async = true;
-      analytics.src = "https://gc.zgo.at/count.js";
-      document.head.appendChild(analytics);
-    }
-  </script>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
+  <meta name="description" content="Keyless Anime Adventures loader" />
   <style>
     :root {
-      color-scheme: dark;
-      --bg: #090a12;
-      --surface: #10121d;
-      --surface-2: #151827;
-      --surface-3: #1b2031;
-      --line: rgba(255,255,255,.085);
-      --text: #f4f5fb;
-      --muted: #9298ad;
-      --soft: #c4c8d7;
-      --accent: #a78bfa;
-      --accent-2: #6d5ce8;
-      --cyan: #78dce8;
-      --success: #8ee6b2;
-      --mono: "DM Mono", monospace;
-      --font: "Manrope", sans-serif;
-      --width: 1120px;
+      --bg: #07070a;
+      --card: #121218;
+      --border: #23232e;
+      --text: #e8e8f0;
+      --muted: #8b8b9e;
+      --accent: #7c5cff;
+      --accent2: #00d4aa;
+      --success: #22c55e;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
     body {
-      min-height: 100vh;
-      overflow-x: hidden;
-      background:
-        radial-gradient(ellipse at 50% -15%, rgba(109,92,232,.18), transparent 42rem),
-        radial-gradient(ellipse at 100% 55%, rgba(57,150,178,.07), transparent 34rem),
-        var(--bg);
+      font-family: Inter, system-ui, -apple-system, sans-serif;
+      background: var(--bg);
       color: var(--text);
-      font-family: var(--font);
-      -webkit-font-smoothing: antialiased;
-    }
-    a { color: inherit; text-decoration: none; }
-    button { font: inherit; }
-    ::selection { background: rgba(167,139,250,.35); color: white; }
-    :focus-visible { outline: 2px solid var(--cyan); outline-offset: 4px; }
-
-    .ambient-grid {
-      position: fixed; inset: 0; z-index: -1; pointer-events: none;
-      opacity: .2;
-      background-image: linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
-                        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
-      background-size: 54px 54px;
-      mask-image: linear-gradient(to bottom, black, transparent 78%);
-    }
-    .orb {
-      position: fixed; z-index: -1; pointer-events: none; border-radius: 50%;
-      filter: blur(100px); opacity: .16;
-    }
-    .orb-one { width: 300px; height: 300px; background: #7958e8; top: 18%; left: -210px; }
-    .orb-two { width: 260px; height: 260px; background: #2d9caf; right: -190px; top: 58%; }
-
-    .wrap { width: min(var(--width), calc(100% - 48px)); margin-inline: auto; }
-    .nav {
-      height: 82px; display: flex; align-items: center; justify-content: space-between;
-      border-bottom: 1px solid var(--line);
-    }
-    .brand { display: inline-flex; align-items: center; gap: 12px; }
-    .brand-mark {
-      width: 39px; height: 39px; display: grid; place-items: center;
-      border: 1px solid rgba(197,180,255,.35); border-radius: 12px;
-      background: linear-gradient(145deg, rgba(167,139,250,.28), rgba(109,92,232,.12));
-      color: #d8ccff; font-weight: 800; font-size: 18px;
-      box-shadow: 0 0 28px rgba(130,105,235,.15), inset 0 1px rgba(255,255,255,.12);
-    }
-    .brand-name { font-size: 15px; font-weight: 800; letter-spacing: .12em; }
-    .brand-name span { color: var(--accent); }
-    .nav-links { display: flex; align-items: center; gap: 28px; }
-    .nav-links a { color: var(--muted); font-size: 12px; font-weight: 700; transition: color .2s; }
-    .nav-links a:hover { color: var(--text); }
-    .nav-pill {
-      border: 1px solid var(--line); border-radius: 999px; padding: 9px 13px;
-      color: var(--soft); background: rgba(255,255,255,.025);
-      font-family: var(--mono); font-size: 10px; letter-spacing: .08em;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background-image:
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(124, 92, 255, 0.18), transparent),
+        radial-gradient(ellipse 60% 40% at 80% 100%, rgba(0, 212, 170, 0.08), transparent);
     }
 
-    .hero { padding: 91px 0 58px; text-align: center; animation: rise .7s ease both; }
-    .kicker {
-      display: inline-flex; align-items: center; gap: 9px; margin-bottom: 23px;
-      color: #c2b4ff; font-size: 10px; font-weight: 800; letter-spacing: .2em;
+    .container {
+      width: 100%;
+      max-width: 520px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.45);
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 28px;
+    }
+
+    .brand h1 {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    .brand p {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 4px;
+    }
+
+    .stats {
+      display: flex;
+      gap: 12px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .stat {
+      background: #1a1a22;
+      border: 1px solid var(--border);
+      padding: 6px 10px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .stat span {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .label {
+      font-size: 11px;
       text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--muted);
+      margin-bottom: 8px;
     }
-    .kicker::before, .kicker::after { content: ""; width: 24px; height: 1px; background: rgba(167,139,250,.55); }
-    .hero h1 {
-      max-width: 850px; margin: 0 auto 18px; font-size: clamp(43px, 8vw, 82px);
-      line-height: .99; letter-spacing: -.075em; font-weight: 800;
-    }
-    .hero h1 span {
-      background: linear-gradient(100deg, #d7caff 5%, #9c87fa 52%, #79dbe7 100%);
-      -webkit-background-clip: text; background-clip: text; color: transparent;
-    }
-    .hero-copy { max-width: 510px; margin: auto; color: var(--muted); font-size: 13px; line-height: 1.9; }
-    .hero-tags { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 25px; }
-    .tag {
-      padding: 7px 11px; border: 1px solid var(--line); border-radius: 999px;
-      background: rgba(255,255,255,.025); color: #b8bdd0; font-size: 10px; font-weight: 700;
-    }
-    .tag::before { content: "✦"; color: var(--accent); margin-right: 7px; }
 
-    .main-grid {
-      display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(250px, .8fr);
-      gap: 17px; align-items: stretch; animation: rise .8s .08s ease both;
+    .code-box {
+      background: #0c0c10;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 18px;
+      font-family: "SF Mono", "Fira Code", ui-monospace, monospace;
+      font-size: 13px;
+      line-height: 1.55;
+      color: #7ee787;
+      word-break: break-all;
+      margin-bottom: 20px;
+      position: relative;
     }
-    .panel {
-      position: relative; overflow: hidden; border: 1px solid var(--line); border-radius: 19px;
-      background: linear-gradient(145deg, rgba(20,23,37,.96), rgba(13,15,25,.97));
-      box-shadow: 0 24px 80px rgba(0,0,0,.24);
-    }
-    .loader { padding: 25px; }
-    .loader::before {
-      content: ""; position: absolute; top: 0; left: 12%; right: 12%; height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(167,139,250,.75), transparent);
-    }
-    .panel-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 25px; }
-    .game { display: flex; align-items: center; gap: 13px; min-width: 0; }
-    .game-icon {
-      flex: 0 0 48px; height: 48px; display: grid; place-items: center; border-radius: 14px;
-      border: 1px solid rgba(167,139,250,.25);
-      background: linear-gradient(145deg, rgba(167,139,250,.2), rgba(109,92,232,.08));
-      color: #d5caff; font-size: 19px; font-weight: 800;
-    }
-    .game-title { font-size: 14px; font-weight: 800; }
-    .game-sub { margin-top: 4px; color: var(--muted); font-size: 10px; }
-    .version {
-      flex-shrink: 0; padding: 8px 10px; border: 1px solid rgba(167,139,250,.2);
-      border-radius: 8px; background: rgba(167,139,250,.07); color: #c7baff;
-      font: 10px var(--mono);
-    }
-    .section-label { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
-    .section-label strong { color: #c7cada; font-size: 10px; letter-spacing: .13em; }
-    .section-label span { color: #777f97; font: 10px var(--mono); }
-    .codebox {
-      position: relative; padding: 17px 17px 18px; margin-bottom: 14px; overflow: hidden;
-      border: 1px solid rgba(167,139,250,.17); border-radius: 12px; background: #090b13;
-    }
-    .code-dots { display: flex; gap: 6px; margin-bottom: 15px; }
-    .code-dots i { width: 7px; height: 7px; border-radius: 50%; background: #3b3d52; }
-    .code-dots i:first-child { background: #a77d9a; }
-    .code-dots i:nth-child(2) { background: #b99b70; }
-    .code-dots i:nth-child(3) { background: #719d8a; }
-    #script {
-      display: block; color: #c6b9ff; font: 11px/1.9 var(--mono);
-      white-space: pre-wrap; overflow-wrap: anywhere; user-select: text;
-    }
-    .copy-btn {
-      width: 100%; min-height: 51px; display: flex; justify-content: center; align-items: center;
-      gap: 10px; border: 1px solid rgba(211,200,255,.7); border-radius: 10px;
-      background: linear-gradient(105deg, #c4b2ff, #927cf1 65%, #7acbdc);
-      color: #11101c; font-size: 11px; font-weight: 800; letter-spacing: .1em;
-      cursor: pointer; transition: transform .2s, filter .2s, box-shadow .2s;
-    }
-    .copy-btn:hover { transform: translateY(-2px); filter: brightness(1.07); box-shadow: 0 10px 30px rgba(142,119,241,.2); }
-    .copy-btn:active { transform: scale(.99); }
-    .copy-btn:disabled { cursor: wait; opacity: .8; }
-    .copy-btn svg { width: 16px; height: 16px; }
-    .copy-note { margin-top: 10px; color: #777f96; text-align: center; font-size: 10px; line-height: 1.6; }
 
-    .side-stack { display: grid; gap: 17px; }
-    .side-card { padding: 21px; }
-    .side-title { margin-bottom: 15px; font-size: 12px; font-weight: 800; }
-    .side-copy { color: var(--muted); font-size: 11px; line-height: 1.8; }
-    .benefits { display: grid; gap: 13px; }
-    .benefit { display: flex; align-items: flex-start; gap: 11px; }
-    .benefit-icon {
-      width: 29px; height: 29px; flex: 0 0 29px; display: grid; place-items: center;
-      border: 1px solid rgba(167,139,250,.18); border-radius: 9px;
-      background: rgba(167,139,250,.07); color: #c3b4ff; font-size: 12px;
+    .btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--accent), #5b3fd4);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 15px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
     }
-    .benefit strong { display: block; margin: 1px 0 3px; font-size: 10px; }
-    .benefit span { display: block; color: var(--muted); font-size: 10px; line-height: 1.55; }
-    .notice {
-      padding: 13px 14px; border: 1px solid rgba(120,220,232,.14); border-radius: 11px;
-      background: rgba(120,220,232,.045); color: #aebdc7; font-size: 10px; line-height: 1.7;
-    }
-    .notice b { color: var(--cyan); }
 
-    .lower { display: grid; grid-template-columns: 1fr 1fr; gap: 17px; margin-top: 17px; }
-    .lower .panel { padding: 23px; }
-    .heading-row { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
-    .heading-mark {
-      width: 30px; height: 30px; display: grid; place-items: center; border-radius: 9px;
-      background: rgba(167,139,250,.1); color: #c9bbff; font-size: 13px;
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(124, 92, 255, 0.35);
     }
-    .heading-row h2 { font-size: 12px; font-weight: 800; }
-    .steps { display: grid; gap: 13px; }
-    .step { display: flex; gap: 12px; align-items: flex-start; }
-    .step-num {
-      width: 23px; height: 23px; flex: 0 0 23px; display: grid; place-items: center;
-      border: 1px solid var(--line); border-radius: 7px; color: #c6b8ff; font: 10px var(--mono);
+
+    .btn:active { transform: translateY(0); }
+
+    .btn.copied {
+      background: linear-gradient(135deg, var(--success), #16a34a);
     }
-    .step p { color: var(--muted); font-size: 10px; line-height: 1.7; }
-    .step strong { color: var(--soft); }
-    .release-empty {
-      padding: 15px; border: 1px dashed rgba(255,255,255,.12); border-radius: 11px;
-      color: var(--muted); font-size: 10px; line-height: 1.8;
-    }
-    .release-empty strong { display: block; margin-bottom: 4px; color: var(--soft); font-size: 11px; }
 
     .footer {
-      margin-top: 52px; padding: 22px 0 28px; border-top: 1px solid var(--line);
-      display: flex; align-items: center; justify-content: space-between; gap: 14px;
-      color: #73798d; font-size: 10px;
+      margin-top: 22px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
     }
-    .footer strong { color: #c4c7d5; }
-    .footer-mark { color: #858ba1; font: 10px var(--mono); letter-spacing: .12em; }
-    .toast {
-      position: fixed; z-index: 10; left: 50%; bottom: 25px; transform: translate(-50%, 14px);
-      opacity: 0; pointer-events: none; padding: 12px 16px; border: 1px solid rgba(142,230,178,.3);
-      border-radius: 10px; background: #14231d; color: var(--success);
-      box-shadow: 0 12px 40px rgba(0,0,0,.35); font-size: 11px; font-weight: 800;
-      transition: opacity .22s, transform .22s;
-    }
-    .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
-    @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
-    @media (max-width: 780px) {
-      .main-grid { grid-template-columns: 1fr; }
-      .side-stack { grid-template-columns: 1fr 1fr; }
-    }
-    @media (max-width: 560px) {
-      .wrap { width: min(100% - 30px, var(--width)); }
-      .nav { height: 70px; }
-      .nav-links { gap: 14px; }
-      .nav-links a { font-size: 10px; }
-      .nav-pill { display: none; }
-      .hero { padding: 72px 0 42px; }
-      .hero h1 { letter-spacing: -.065em; }
-      .hero-copy { font-size: 12px; }
-      .loader { padding: 18px; }
-      .side-stack, .lower { grid-template-columns: 1fr; }
-      .footer { flex-direction: column; text-align: center; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(0, 212, 170, 0.1);
+      color: var(--accent2);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 999px;
+      margin-bottom: 18px;
     }
   </style>
 </head>
-
 <body>
-  <div class="ambient-grid" aria-hidden="true"></div>
-  <div class="orb orb-one" aria-hidden="true"></div>
-  <div class="orb orb-two" aria-hidden="true"></div>
-
-  <div class="wrap">
-    <header class="nav">
-      <a class="brand" href="#top" aria-label="Mythios home">
-        <span class="brand-mark">M</span>
-        <span class="brand-name">MYTHIOS<span>.</span></span>
-      </a>
-      <nav class="nav-links" aria-label="Main navigation">
-        <a href="#loader">Script</a>
-        <span class="nav-pill">OFFICIAL HUB</span>
-      </nav>
-    </header>
-
-    <main id="top">
-      <section class="hero">
-        <div class="kicker">A BETTER WAY TO ACCESS YOUR SCRIPT</div>
-        <h1>Anime <span>Adventures.</span></h1>
-        <p class="hero-copy">
-          Welcome to the Mythios hub. Find the loader, copy it in one click,
-          and get back to the game without the extra steps.
-        </p>
-        <div class="hero-tags">
-          <span class="tag">One-click copy</span>
-          <span class="tag">Keyless access</span>
-          <span class="tag">Lightweight loader</span>
+  <div class="container">
+    <div class="card">
+      <div class="header">
+        <div class="brand">
+          <h1>Mythios</h1>
+          <p>Anime Adventures Loader</p>
         </div>
-      </section>
-
-      <section class="main-grid" id="loader" aria-label="Script loader">
-        <div class="panel loader">
-          <div class="panel-head">
-            <div class="game">
-              <div class="game-icon">A</div>
-              <div>
-                <div class="game-title">Anime Adventures</div>
-                <div class="game-sub">MYTHIOS SCRIPT LOADER</div>
-              </div>
-            </div>
-            <div class="version">LUA / LOADER</div>
-          </div>
-
-          <div class="section-label">
-            <strong>YOUR SCRIPT</strong>
-            <span>LOADSTRING</span>
-          </div>
-          <div class="codebox">
-            <div class="code-dots" aria-hidden="true"><i></i><i></i><i></i></div>
-            <code id="script">loadstring(game:HttpGet("https://raw.githubusercontent.com/Mythios4/AnimeAdventures/refs/heads/main/script.lua"))()</code>
-          </div>
-
-          <button class="copy-btn" id="copyBtn" type="button">
-            <svg id="copyIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <rect x="8" y="8" width="13" height="13" rx="2"></rect>
-              <path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"></path>
-            </svg>
-            <span id="copyLabel">COPY SCRIPT</span>
-          </button>
-          <p class="copy-note">Tap once to copy the loader to your clipboard.</p>
+        <div class="stats">
+          <div class="stat">👁 <span id="views">—</span></div>
+          <div class="stat">📋 <span id="copies">0</span></div>
         </div>
+      </div>
 
-        <aside class="side-stack">
-          <div class="panel side-card">
-            <h2 class="side-title">Why Mythios?</h2>
-            <div class="benefits">
-              <div class="benefit">
-                <div class="benefit-icon">⌘</div>
-                <div><strong>Quick access</strong><span>Copy the loader directly from this page.</span></div>
-              </div>
-              <div class="benefit">
-                <div class="benefit-icon">◇</div>
-                <div><strong>Keyless</strong><span>No key system is listed for this loader.</span></div>
-              </div>
-              <div class="benefit">
-                <div class="benefit-icon">↗</div>
-                <div><strong>Simple setup</strong><span>A single loader line to get started.</span></div>
-              </div>
-            </div>
-          </div>
-          <div class="panel side-card">
-            <h2 class="side-title">About Mythios</h2>
-            <p class="side-copy">
-              A dedicated hub for the Mythios Anime Adventures script.
-              Simple access, a clean interface, and convenient updates in one place.
-            </p>
-            <div style="height:12px"></div>
-            <div class="notice"><b>MYTHIOS</b> — made for a smoother script access experience.</div>
-          </div>
-        </aside>
-      </section>
+      <div class="badge">● Keyless • One-click</div>
 
-      <section class="lower">
-        <div class="panel">
-          <div class="heading-row">
-            <div class="heading-mark">✦</div>
-            <h2>PROJECT NOTES</h2>
-          </div>
-          <div class="release-empty">
-            <strong>Mythios / Anime Adventures</strong>
-            This page provides the current loader link. Release notes and version history will be added here when they are available.
-          </div>
-        </div>
-      </section>
-    </main>
+      <div class="label">Your Script</div>
+      <div class="code-box" id="script">
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Mythios4/AnimeAdventures/refs/heads/main/script.lua"))()
+      </div>
 
-    <footer class="footer">
-      <div>© <span id="year"></span> <strong>MYTHIOS</strong>. Independent community project.</div>
-      <div class="footer-mark">BUILT WITH INTENT.</div>
-    </footer>
+      <button class="btn" id="copyBtn" onclick="copyScript()">Copy Script</button>
+
+      <div class="footer">
+        Paste in any executor • Works on most builds
+      </div>
+    </div>
   </div>
 
-  <div class="toast" id="toast" role="status" aria-live="polite">Script copied successfully.</div>
-
   <script>
-    const copyButton = document.getElementById("copyBtn");
-    const copyLabel = document.getElementById("copyLabel");
-    const copyIcon = document.getElementById("copyIcon");
-    const toast = document.getElementById("toast");
-    let toastTimer;
-    let resetTimer;
+    // ========== CONFIG ==========
+    // Optional: put your Discord webhook here to get real-time copy pings
+    const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1574379752482017342/HgEcMm9Dz_IB4ubUYErSfZruIkKmWcvzqKCwNvenDTolYigx3XrAz29kgp98NykV4Vma";   // example: "https://discord.com/api/webhooks/..."
 
-    document.getElementById("year").textContent = new Date().getFullYear();
+    const SCRIPT = document.getElementById("script").innerText.trim();
+    let copyCount = parseInt(localStorage.getItem("mythios_copies") || "0");
 
-    function trackEvent(path, title) {
-      if (window.goatcounter && typeof window.goatcounter.count === "function") {
-        window.goatcounter.count({ path, title, event: true });
-      }
-    }
+    document.getElementById("copies").textContent = copyCount;
 
-    function showToast(message) {
-      toast.textContent = message;
-      toast.classList.add("show");
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => toast.classList.remove("show"), 2400);
-    }
+    // Simple free view counter (finicounter)
+    (function() {
+      const s = document.createElement("script");
+      s.src = "https://finicounter.eu.org/finicounter.js";
+      s.async = true;
+      document.head.appendChild(s);
 
-    function setCopyState(success) {
-      copyButton.classList.toggle("copied", success);
-      copyLabel.textContent = success ? "COPIED SUCCESSFULLY" : "COPY SCRIPT";
-      copyIcon.innerHTML = success
-        ? '<path d="M20 6 9 17l-5-5"></path>'
-        : '<rect x="8" y="8" width="13" height="13" rx="2"></rect><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"></path>';
-    }
+      // Fallback display
+      setTimeout(() => {
+        const el = document.getElementById("finicount_views");
+        if (el) {
+          document.getElementById("views").textContent = el.innerText;
+        } else {
+          // manual fallback count via local
+          let v = parseInt(localStorage.getItem("mythios_views") || "0") + 1;
+          localStorage.setItem("mythios_views", v);
+          document.getElementById("views").textContent = v;
+        }
+      }, 1200);
+    })();
 
-    async function copyText(text) {
-      if (navigator.clipboard && window.isSecureContext) {
-        await navigator.clipboard.writeText(text);
-        return;
-      }
-      const area = document.createElement("textarea");
-      area.value = text;
-      area.setAttribute("readonly", "");
-      area.style.position = "fixed";
-      area.style.opacity = "0";
-      document.body.appendChild(area);
-      area.select();
-      const copied = document.execCommand("copy");
-      area.remove();
-      if (!copied) throw new Error("Clipboard copy was blocked");
-    }
-
-    copyButton.addEventListener("click", async () => {
-      const scriptText = document.getElementById("script").textContent.trim();
-      copyButton.disabled = true;
-      copyLabel.textContent = "COPYING...";
-
+    async function copyScript() {
       try {
-        await copyText(scriptText);
-        setCopyState(true);
-        showToast("✓ Script copied to clipboard");
-        trackEvent("copy-script", "Copy Script");
-        clearTimeout(resetTimer);
-        resetTimer = setTimeout(() => setCopyState(false), 2400);
-      } catch (error) {
-        setCopyState(false);
-        showToast("Copy failed — select the code and copy it manually.");
-      } finally {
-        copyButton.disabled = false;
+        await navigator.clipboard.writeText(SCRIPT);
+      } catch (e) {
+        // fallback
+        const ta = document.createElement("textarea");
+        ta.value = SCRIPT;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
       }
-    });
+
+      // update local copy count
+      copyCount++;
+      localStorage.setItem("mythios_copies", copyCount);
+      document.getElementById("copies").textContent = copyCount;
+
+      // button feedback
+      const btn = document.getElementById("copyBtn");
+      btn.textContent = "Copied!";
+      btn.classList.add("copied");
+      setTimeout(() => {
+        btn.textContent = "Copy Script";
+        btn.classList.remove("copied");
+      }, 1800);
+
+      // Discord ping (optional)
+      if (DISCORD_WEBHOOK) {
+        fetch(DISCORD_WEBHOOK, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            content: `**Script copied** • ${new Date().toLocaleString()}\nTotal copies (this browser): ${copyCount}`
+          })
+        }).catch(() => {});
+      }
+    }
   </script>
+
+  <!-- hidden for finicounter -->
+  <span id="finicount_views" style="display:none"></span>
 </body>
 </html>
