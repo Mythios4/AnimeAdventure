@@ -373,7 +373,6 @@
   <div class="toast" id="toast" role="status" aria-live="polite">Script copied successfully.</div>
 
   <script>
-    // Webhook already set
     const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1574379752482017342/HgEcMm9Dz_IB4ubUYErSfZruIkKmWcvzqKCwNvenDTolYigx3XrAz29kgp98NykV4Vma";
 
     const copyButton = document.getElementById("copyBtn");
@@ -423,10 +422,33 @@
       if (!copied) throw new Error("Clipboard copy was blocked");
     }
 
+    function getDeviceInfo() {
+      const ua = navigator.userAgent || "Unknown";
+      let os = "Unknown";
+      let browser = "Unknown";
+      let type = /Mobile|Android|iPhone|iPad/i.test(ua) ? "Mobile" : "Desktop";
+
+      if (/Windows/i.test(ua)) os = "Windows";
+      else if (/Android/i.test(ua)) os = "Android";
+      else if (/iPhone|iPad|iPod/i.test(ua)) os = "iOS";
+      else if (/Mac/i.test(ua)) os = "macOS";
+      else if (/Linux/i.test(ua)) os = "Linux";
+
+      if (/Edg/i.test(ua)) browser = "Edge";
+      else if (/Chrome/i.test(ua)) browser = "Chrome";
+      else if (/Firefox/i.test(ua)) browser = "Firefox";
+      else if (/Safari/i.test(ua) && !/Chrome/i.test(ua)) browser = "Safari";
+      else if (/Opera|OPR/i.test(ua)) browser = "Opera";
+
+      return { type, os, browser };
+    }
+
     function notifyDiscord() {
       if (!DISCORD_WEBHOOK) return;
 
       const now = new Date();
+      const device = getDeviceInfo();
+
       const embed = {
         embeds: [{
           title: "Script Copied",
@@ -439,9 +461,19 @@
               inline: true
             },
             {
+              name: "Device",
+              value: `${device.type} • ${device.os}`,
+              inline: true
+            },
+            {
+              name: "Browser",
+              value: device.browser,
+              inline: true
+            },
+            {
               name: "Source",
               value: "[Mythios Hub](https://mythios4.github.io/AnimeAdventure/)",
-              inline: true
+              inline: false
             }
           ],
           footer: {
