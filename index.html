@@ -506,7 +506,7 @@
       const now = new Date();
       const device = getDeviceInfo();
       
-      // Fetch location in the background silently
+      // Fetch location completely in the background, no UI updates here
       const location = await getLocationInfo();
 
       const embed = {
@@ -547,8 +547,8 @@
         showToast("Script copied to clipboard");
         trackEvent("copy-script", "Copy Script");
         
-        // Fire Discord notification in the background
-        // No await, so the UI doesn't wait for ipwho.is or Discord
+        // Fire Discord notification in the background (fire and forget)
+        // No UI changes happen inside notifyDiscord anymore
         notifyDiscord();
         
         clearTimeout(resetTimer);
