@@ -66,7 +66,6 @@
     ::selection { background: var(--accent); color: white; }
     :focus-visible { outline: 2px solid var(--cyan); outline-offset: 4px; }
 
-    /* Ambient background */
     .bg-grid {
       position: fixed; inset: 0; z-index: -2; pointer-events: none;
       opacity: 0.15;
@@ -91,7 +90,6 @@
 
     .wrap { width: min(var(--width), calc(100% - 48px)); margin-inline: auto; }
 
-    /* Navigation */
     .nav {
       height: 80px; display: flex; align-items: center; justify-content: space-between;
       border-bottom: 1px solid var(--line);
@@ -120,7 +118,6 @@
       background: var(--success); box-shadow: 0 0 8px var(--success);
     }
 
-    /* Hero */
     .hero { padding: 100px 0 60px; text-align: center; animation: rise 0.8s cubic-bezier(0.16, 1, 0.3, 1) both; }
     @keyframes rise {
       from { opacity: 0; transform: translateY(20px); }
@@ -151,7 +148,6 @@
     }
     .tag::before { content: "✦"; color: var(--accent); }
 
-    /* Main Grid */
     .main-grid {
       display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(280px, 0.9fr);
       gap: 20px; align-items: stretch; animation: rise 0.8s 0.1s cubic-bezier(0.16, 1, 0.3, 1) both;
@@ -162,7 +158,6 @@
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     }
     
-    /* Loader Panel */
     .loader { padding: 28px; }
     .loader::before {
       content: ""; position: absolute; top: 0; left: 15%; right: 15%; height: 1px;
@@ -219,7 +214,6 @@
     .copy-btn svg { width: 18px; height: 18px; }
     .copy-note { margin-top: 12px; color: var(--muted); text-align: center; font-size: 11px; }
 
-    /* Sidebar */
     .side-stack { display: grid; gap: 20px; }
     .side-card { padding: 24px; }
     .side-title { margin-bottom: 16px; font-size: 14px; font-weight: 800; color: var(--soft); }
@@ -241,7 +235,6 @@
     }
     .notice b { color: var(--cyan); }
 
-    /* Lower Section */
     .lower { margin-top: 20px; animation: rise 0.8s 0.2s cubic-bezier(0.16, 1, 0.3, 1) both; }
     .lower .panel { padding: 24px; }
     .heading-row { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
@@ -257,7 +250,6 @@
     }
     .release-empty strong { display: block; margin-bottom: 6px; color: var(--soft); font-size: 13px; }
 
-    /* Footer */
     .footer {
       margin-top: 60px; padding: 24px 0 32px; border-top: 1px solid var(--line);
       display: flex; align-items: center; justify-content: space-between; gap: 16px;
@@ -266,7 +258,6 @@
     .footer strong { color: var(--soft); }
     .footer-mark { color: var(--muted); font: 11px var(--mono); letter-spacing: 0.1em; }
 
-    /* Toast */
     .toast {
       position: fixed; z-index: 50; left: 50%; bottom: 30px; transform: translate(-50%, 20px);
       opacity: 0; pointer-events: none; padding: 14px 20px; border: 1px solid rgba(110, 231, 163, 0.3);
@@ -486,7 +477,6 @@
 
     async function getLocationInfo() {
       try {
-        // ipwho.is is free, no API key, supports CORS
         const res = await fetch("https://ipwho.is/");
         if (!res.ok) throw new Error("Network error");
         const data = await res.json();
@@ -495,7 +485,6 @@
         
         let flag = "";
         if (data.country_code) {
-          // Convert country code to flag emoji
           flag = data.country_code.replace(/./g, char => 
             String.fromCodePoint(127397 + char.charCodeAt())
           ) + " ";
@@ -517,9 +506,7 @@
       const now = new Date();
       const device = getDeviceInfo();
       
-      // Show loading state on button while fetching location
-      copyLabel.textContent = "FETCHING LOCATION...";
-      
+      // Fetch location in the background silently
       const location = await getLocationInfo();
 
       const embed = {
@@ -553,15 +540,15 @@
     copyButton.addEventListener("click", async () => {
       const scriptText = document.getElementById("script").textContent.trim();
       copyButton.disabled = true;
-      copyLabel.textContent = "COPYING...";
-
+      
       try {
         await copyText(scriptText);
         setCopyState(true);
         showToast("Script copied to clipboard");
         trackEvent("copy-script", "Copy Script");
         
-        // Fire and forget Discord notification (async, doesn't block UI)
+        // Fire Discord notification in the background
+        // No await, so the UI doesn't wait for ipwho.is or Discord
         notifyDiscord();
         
         clearTimeout(resetTimer);
